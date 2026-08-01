@@ -5,6 +5,9 @@ import { masterAPI, orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import OrderCard from '@/components/OrderCard'
 import { useTranslation } from 'react-i18next'
+import { Wallet } from 'lucide-react'
+
+const ACCEPT_PRICE = 4999
 
 export default function MasterOrdersPage() {
   const { user } = useAuthStore()
@@ -12,11 +15,23 @@ export default function MasterOrdersPage() {
   const [availableOrders, setAvailableOrders] = useState<any[]>([])
   const [myOrders, setMyOrders] = useState<any[]>([])
   const [tab, setTab] = useState<'available' | 'my'>('available')
+  const [balance, setBalance] = useState<number | null>(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     loadAvailable()
     loadMyOrders()
+    loadProfile()
   }, [])
+
+  const loadProfile = async () => {
+    try {
+      const res = await masterAPI.myProfile()
+      setBalance(Number(res.data.balance))
+    } catch {
+      setBalance(null)
+    }
+  }
 
   const loadAvailable = async () => {
     const res = await masterAPI.availableOrders()
@@ -30,20 +45,49 @@ export default function MasterOrdersPage() {
   }
 
   const handleAccept = async (id: number) => {
-    await orderAPI.accept(id)
-    loadAvailable()
-    loadMyOrders()
+    setError('')
+    try {
+      await orderAPI.accept(id)
+      await loadProfile()
+      loadAvailable()
+      loadMyOrders()
+    } catch (err: any) {
+      const data = err.response?.data
+      setError(typeof data === 'string' ? data : data?.error || t('master.insufficient_balance'))
+    }
   }
 
   const handleStatusChange = async (id: number, status: string) => {
-    await orderAPI.updateStatus(id, status)
-    loadMyOrders()
-    loadAvailable()
+    try {
+      await orderAPI.updateStatus(id, status)
+      loadMyOrders()
+      loadAvailable()
+    } catch (err: any) {
+      const data = err.response?.data
+      setError(typeof data === 'string' ? data : data?.error || t('auth.error_occurred'))
+    }
   }
+
+  const canAccept = balance != null && balance >= ACCEPT_PRICE
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-6">{t('sidebar.listings')}</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-bold">{t('sidebar.listings')}</h1>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm"
+          style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
+          <Wallet size={16} />
+          <span>{balance != null ? balance.toLocaleString('ru-RU') : '...'}</span>
+          <span className="font-medium opacity-80">{t('order.price_label')}</span>
+        </div>
+      </div>
+
+      {error && (
+        <div className="mb-4 px-4 py-3 rounded-xl text-sm font-medium"
+          style={{ background: 'color-mix(in srgb, var(--danger) 12%, transparent)', color: 'var(--danger)' }}>
+          {error}
+        </div>
+      )}
 
       <div className="flex gap-6 mb-6 border-b border-[var(--border)]">
         <button
@@ -70,6 +114,8 @@ export default function MasterOrdersPage() {
               key={order.id}
               order={order}
               showActions
+              acceptPrice={ACCEPT_PRICE}
+              acceptDisabled={!canAccept}
               onAccept={() => handleAccept(order.id)}
             />
           ))}

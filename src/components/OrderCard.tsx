@@ -22,11 +22,15 @@ export default function OrderCard({
   onAccept,
   onStatusChange,
   showActions,
+  acceptPrice,
+  acceptDisabled,
 }: {
   order: Order
   onAccept?: () => void
   onStatusChange?: (status: string) => void
   showActions?: boolean
+  acceptPrice?: number | null
+  acceptDisabled?: boolean
 }) {
   const { t } = useTranslation()
   return (
@@ -73,9 +77,13 @@ export default function OrderCard({
       {showActions && order.status === 'new' && onAccept && (
         <button
           onClick={onAccept}
+          disabled={acceptDisabled}
           className="btn btn-primary mt-4 w-full py-2.5 font-bold"
         >
           {t('order.accept')}
+          {acceptPrice != null && (
+            <span className="ml-2 opacity-90">- {acceptPrice.toLocaleString('ru-RU')} {t('order.price_label')}</span>
+          )}
         </button>
       )}
 

@@ -39,6 +39,7 @@
   "auth.about_self": "О себе",
   "auth.experience_years": "Опыт (лет)",
   "auth.choose_profession": "Выберите профессию",
+  "auth.choose_profession_required": "Выберите хотя бы одну категорию профессии",
 
   "sidebar.orders": "Мои заказы",
   "sidebar.masters": "Мастера",
@@ -120,6 +121,8 @@
   "master.experience_label": "лет",
   "master.save": "Сохранить",
   "master.cancel": "Назад",
+  "master.balance": "Баланс",
+  "master.insufficient_balance": "Недостаточно средств на балансе. Стоимость принятия объявления 4 999 сум.",
 
   "admin.dashboard": "Панель администратора",
   "admin.users": "Пользователи",
@@ -141,6 +144,7 @@
   "table.rating": "Рейтинг",
   "table.status": "Статус",
   "table.experience": "Опыт",
+  "table.balance": "Баланс",
   "table.order": "Заказ",
   "table.client": "Клиент",
   "table.master": "Мастер",

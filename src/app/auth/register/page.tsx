@@ -48,6 +48,10 @@ export default function RegisterPage() {
     e.preventDefault()
     setError('')
     try {
+      if (form.role === 'master' && form.profession_ids.length === 0) {
+        setError(t('auth.choose_profession_required'))
+        return
+      }
       const user = await register({
         phone: form.phone,
         password: form.password,
@@ -55,6 +59,9 @@ export default function RegisterPage() {
         first_name: form.first_name,
         last_name: form.last_name,
         role: form.role,
+        profession_ids: form.role === 'master' ? form.profession_ids : undefined,
+        bio: form.role === 'master' ? form.bio : undefined,
+        experience_years: form.role === 'master' ? form.experience_years : undefined,
       })
       const routes: Record<string, string> = {
         client: '/client',

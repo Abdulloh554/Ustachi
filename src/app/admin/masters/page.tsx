@@ -26,6 +26,7 @@ export default function AdminMastersPage() {
                 <th>{t('table.rating')}</th>
                 <th>{t('table.status')}</th>
                 <th>{t('table.experience')}</th>
+                <th>{t('table.balance')}</th>
               </tr>
             </thead>
             <tbody>
@@ -48,6 +49,12 @@ export default function AdminMastersPage() {
                     </span>
                   </td>
                   <td>{m.experience_years} {t('master.experience_label')}</td>
+                  <td>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                      style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
+                      {Number(m.balance || 0).toLocaleString('ru-RU')} {t('order.price_label')}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>

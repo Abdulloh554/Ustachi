@@ -39,6 +39,7 @@
   "auth.about_self": "Ozingiz haqingizda",
   "auth.experience_years": "Tajriba (yil)",
   "auth.choose_profession": "Kasbingizni tanlang",
+  "auth.choose_profession_required": "Kamida bitta kasb kategoriyasini tanlang",
 
   "sidebar.orders": "Buyurtmalarim",
   "sidebar.masters": "Ustalar",
@@ -120,6 +121,8 @@
   "master.experience_label": "yil",
   "master.save": "Saqlash",
   "master.cancel": "Ortga",
+  "master.balance": "Balans",
+  "master.insufficient_balance": "Balansda yetarli mablag' yo'q. Elon qabul qilish narxi 4 999 so'm.",
 
   "admin.dashboard": "Admin Dashboard",
   "admin.users": "Foydalanuvchilar",
@@ -141,6 +144,7 @@
   "table.rating": "Reyting",
   "table.status": "Holat",
   "table.experience": "Tajriba",
+  "table.balance": "Balans",
   "table.order": "Buyurtma",
   "table.client": "Mijoz",
   "table.master": "Usta",
