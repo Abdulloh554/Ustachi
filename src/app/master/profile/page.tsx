@@ -106,6 +106,8 @@ export default function MasterProfilePage() {
               type="button"
               onClick={() => setForm({ ...form, is_available: !form.is_available })}
               className={`toggle ${form.is_available ? 'active' : ''}`}
+              aria-pressed={form.is_available}
+              aria-label={t('order.status_label')}
             >
               <span className="toggle-track" />
               <span className="toggle-knob" />

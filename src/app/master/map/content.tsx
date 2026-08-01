@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore'
 import { useTranslation } from 'react-i18next'
 import { MapPin, Navigation, X } from 'lucide-react'
 import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 const defaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',

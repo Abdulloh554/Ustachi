@@ -40,6 +40,8 @@ export default function ClientSettingsPage() {
           <button
             onClick={toggle}
             className={`toggle ${theme === 'dark' ? 'active' : ''}`}
+            aria-pressed={theme === 'dark'}
+            aria-label={t('settings.dark_mode')}
           >
             <span className="toggle-track" />
             <span className="toggle-knob" />

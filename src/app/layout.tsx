@@ -1,8 +1,21 @@
 import type { Metadata } from 'next'
+import { Inter, Manrope } from 'next/font/google'
 import './globals.css'
 import ThemeProvider from '@/components/providers/ThemeProvider'
 import AuthProvider from '@/components/providers/AuthProvider'
 import I18nProvider from '@/components/providers/I18nProvider'
+
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-body',
+  display: 'swap',
+})
+
+const manrope = Manrope({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-display',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Ustachi',
@@ -11,21 +24,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossOrigin=""
-        />
-      </head>
+    <html lang="uz" suppressHydrationWarning className={`${inter.variable} ${manrope.variable}`}>
       <body>
         <ThemeProvider>
           <AuthProvider>
