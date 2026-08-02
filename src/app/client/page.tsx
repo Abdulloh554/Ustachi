@@ -67,11 +67,11 @@ export default function ClientOrdersPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold">{t('client.my_orders')}</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary flex items-center gap-2 px-3 py-1.5 text-sm"
+          className="btn btn-primary flex items-center justify-center gap-2 px-3 py-1.5 text-sm min-h-11"
         >
           <Plus size={16} /> {t('client.new_order')}
         </button>

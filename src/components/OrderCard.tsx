@@ -63,12 +63,12 @@ export default function OrderCard({
 
   return (
     <div className="order-card">
-      <div className="flex flex-col items-end gap-3 min-[480px]:flex-row min-[480px]:items-start min-[480px]:justify-between">
-        <div className="min-w-0">
+      <div className="flex flex-col min-[640px]:flex-row min-[640px]:items-start min-[640px]:justify-between">
+        <div className="w-full min-w-0 min-[640px]:w-auto">
           <h3 className="text-[18px] font-medium leading-snug">{order.title}</h3>
           <div className="flex items-center gap-2.5 mt-2">
             <span
-              className="avatar w-9 h-9 rounded-full text-sm shrink-0"
+              className="avatar w-8 h-8 rounded-full text-xs shrink-0 min-[640px]:w-9 min-[640px]:h-9 min-[640px]:text-sm"
               style={{ background: avatarBg, color: avatarFg }}
             >
               {clientName[0].toUpperCase()}
@@ -81,7 +81,7 @@ export default function OrderCard({
             </span>
           </div>
         </div>
-        <div className="shrink-0">
+        <div className="shrink-0 self-end min-[640px]:self-auto">
           <StatusBadge status={order.status} />
         </div>
       </div>
@@ -117,12 +117,12 @@ export default function OrderCard({
         </div>
       )}
 
-      <div className="mt-5 pt-4 border-t border-[var(--border)] flex flex-col gap-2 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
+      <div className="mt-5 pt-4 border-t border-[var(--border)] flex flex-col gap-2 min-[640px]:flex-row min-[640px]:items-center min-[640px]:justify-between">
         <span className="text-xs flex items-center gap-1.5" style={{ color: 'var(--text-light)' }}>
           <Clock size={13} /> {formatDate(order.created_at)}
         </span>
         {order.price && (
-          <span className="text-[20px] font-medium leading-none" style={{ color: 'var(--text)' }}>
+          <span className="text-[20px] font-medium leading-none min-[640px]:ml-auto" style={{ color: 'var(--text)' }}>
             {order.price}
             <span className="text-sm font-normal ml-1" style={{ color: 'var(--text-light)' }}>
               {t('order.price_label')}

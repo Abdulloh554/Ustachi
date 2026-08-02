@@ -221,6 +221,12 @@ tbody tr:hover {
     box-shadow: var(--shadow-md);
   }
 
+  @media (max-width: 639px) {
+    .order-card {
+      padding: 16px;
+    }
+  }
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -416,7 +422,7 @@ tbody tr:hover {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.625rem 0.875rem;
+    padding: 0.75rem 0.875rem;
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: 0.75rem;
