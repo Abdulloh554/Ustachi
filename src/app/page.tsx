@@ -20,7 +20,7 @@ const howItWorks = [
 ]
 
 export default function LandingPage() {
-  const { user } = useAuthStore()
+  const { user, isLoading } = useAuthStore()
   const { t } = useTranslation()
 
   return (
@@ -30,13 +30,15 @@ export default function LandingPage() {
         style={{ background: 'rgba(var(--bg-rgb), 0.78)' }}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-accent">
+            <span className="w-9 h-9 rounded-xl bg-[var(--accent)] flex items-center justify-center">
               <Wrench size={18} className="text-white" />
             </span>
             <span className="font-display font-extrabold text-lg tracking-tight">{t('app.name')}</span>
           </Link>
           <div className="flex items-center gap-2">
-            {user ? (
+            {isLoading ? (
+              <div className="skeleton h-9 w-32 rounded-full" />
+            ) : user ? (
               <Link
                 href={user.role === 'client' ? '/client' : user.role === 'master' ? '/master' : '/admin'}
                 className="btn btn-primary px-4 py-2 text-sm"
@@ -59,24 +61,16 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative pt-40 pb-24 px-6">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full opacity-60 blur-3xl"
-            style={{ background: 'radial-gradient(circle, var(--accent-light), transparent 65%)' }} />
-          <div className="absolute top-40 -left-32 w-[420px] h-[420px] rounded-full opacity-50 blur-3xl"
-            style={{ background: 'radial-gradient(circle, rgba(232,221,196,0.9), transparent 65%)' }} />
-        </div>
-
         <div className="relative max-w-3xl mx-auto text-center animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-7 border border-[var(--border)] shadow-sm"
-            style={{ background: 'color-mix(in srgb, var(--surface) 70%, transparent)', color: 'var(--text-secondary)' }}>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-7 border border-[var(--border)]"
+            style={{ background: 'var(--surface)', color: 'var(--text-secondary)' }}>
             <Sparkles size={13} style={{ color: 'var(--accent)' }} />
             {t('landing.hero_badge')}
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.05] tracking-tight mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-6">
             {t('landing.hero_title_1')}<br />
-            <span className="bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(135deg, var(--accent), var(--accent-active))' }}>
+            <span style={{ color: 'var(--accent)' }}>
               {t('landing.hero_title_2')}
             </span>
           </h1>
@@ -103,7 +97,7 @@ export default function LandingPage() {
             <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
               {t('app.name')}
             </p>
-            <h2 className="text-3xl font-extrabold tracking-tight mb-3">{t('landing.feature_title')}</h2>
+            <h2 className="text-3xl font-bold tracking-tight mb-3">{t('landing.feature_title')}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -111,8 +105,7 @@ export default function LandingPage() {
               const Icon = f.icon
               return (
                 <div key={f.titleKey} className="card card-hover p-6 rounded-2xl">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 shadow-accent"
-                    style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-active))' }}>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 bg-[var(--accent)]">
                     <Icon size={20} className="text-white" />
                   </div>
                   <h3 className="font-display font-bold text-base mb-1.5">{t(f.titleKey)}</h3>
@@ -131,16 +124,14 @@ export default function LandingPage() {
             <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
               {t('landing.how_title')}
             </p>
-            <h2 className="text-3xl font-extrabold tracking-tight">{t('landing.how_title')}</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{t('landing.how_title')}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-            <div className="hidden md:block absolute top-5 left-[12%] right-[12%] h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, var(--border), transparent)' }} />
+            <div className="hidden md:block absolute top-5 left-[12%] right-[12%] h-px bg-[var(--border)]" />
             {howItWorks.map((item) => (
               <div key={item.step} className="text-center relative">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold mx-auto mb-4 text-white font-display relative z-10 shadow-accent"
-                  style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-hover))' }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-4 text-white font-display relative z-10 bg-[var(--accent)]">
                   {item.step}
                 </div>
                 <h3 className="font-display font-bold text-base mb-1.5">{t(item.titleKey)}</h3>
@@ -154,10 +145,8 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-20 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl px-8 py-16 text-center text-white shadow-lg"
-            style={{ background: 'linear-gradient(135deg, var(--accent), var(--accent-active))' }}>
-            <div className="pointer-events-none absolute inset-0 opacity-20"
-              style={{ background: 'radial-gradient(500px 240px at 80% -20%, #fff, transparent 60%), radial-gradient(400px 220px at 10% 120%, #000, transparent 55%)' }} />
+          <div className="relative overflow-hidden rounded-3xl px-8 py-16 text-center text-white"
+            style={{ background: 'var(--accent)' }}>
             <div className="relative">
               <h2 className="text-3xl font-extrabold tracking-tight mb-3">{t('landing.cta_title')}</h2>
               <p className="text-base mb-8 opacity-90 max-w-md mx-auto">{t('landing.cta_desc')}</p>

@@ -3,56 +3,70 @@
 @tailwind utilities;
 
 :root {
-  --bg: #ffffff;
-  --bg-rgb: 255 255 255;
-  --bg-secondary: #faf7f1;
-  --surface: #ffffff;
-  --border: #e8ddc4;
-  --text: #2b1a0f;
-  --text-secondary: #6b5a45;
-  --text-light: #93826c;
-  --accent: #8B3103;
-  --accent-hover: #6b2502;
-  --accent-active: #551e02;
-  --accent-light: #f3e2d4;
-  --accent-bg: rgba(139, 49, 3, 0.04);
-  --danger: #dc2626;
-  --danger-hover: #b91c1c;
-  --success: #16a34a;
-  --warning: #d97706;
+  --bg: #F4F7FB;
+  --bg-rgb: 244 247 251;
+  --bg-secondary: #EAF0F6;
+  --surface: #FFFFFF;
+  --border: #D8E0EB;
+  --text: #0F172A;
+  --text-secondary: #64748B;
+  --text-light: #94A3B8;
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --accent-active: #1E40AF;
+  --accent-light: #EFF6FF;
+  --accent-bg: rgba(37, 99, 235, 0.05);
+  --danger: #DC2626;
+  --danger-hover: #B91C1C;
+  --success: #16A34A;
+  --success-hover: #15803D;
+  --warning: #D97706;
+  --warning-hover: #B45309;
 
   --font-display: 'Manrope', 'Segoe UI', system-ui, sans-serif;
   --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
 
-  --shadow-sm: 0 1px 2px rgba(43, 26, 15, 0.05), 0 1px 3px rgba(43, 26, 15, 0.08);
-  --shadow-md: 0 2px 4px rgba(43, 26, 15, 0.04), 0 10px 28px rgba(43, 26, 15, 0.09);
-  --shadow-lg: 0 6px 12px rgba(43, 26, 15, 0.06), 0 24px 48px rgba(43, 26, 15, 0.12);
-  --shadow-accent: 0 6px 16px rgba(139, 49, 3, 0.22);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
+  --shadow-accent: none;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --dur-instant: 100ms;
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-slow: 300ms;
+  --dur-slower: 450ms;
 }
 
 .dark {
-  --bg: #1c140d;
-  --bg-rgb: 28 20 13;
-  --bg-secondary: #241a11;
-  --surface: #2b2015;
-  --border: #3d2f1f;
-  --text: #f5ecd9;
-  --text-secondary: #c4b494;
-  --text-light: #a08f6f;
-  --accent: #c1541f;
-  --accent-hover: #d4692f;
-  --accent-active: #e37f42;
-  --accent-light: rgba(193, 84, 31, 0.16);
-  --accent-bg: rgba(193, 84, 31, 0.08);
-  --danger: #ef4444;
-  --danger-hover: #f87171;
-  --success: #22c55e;
-  --warning: #f59e0b;
+  --bg: #0B1220;
+  --bg-rgb: 11 18 32;
+  --bg-secondary: #111827;
+  --surface: #161F2E;
+  --border: #263349;
+  --text: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-light: #64748B;
+  --accent: #3B82F6;
+  --accent-hover: #60A5FA;
+  --accent-active: #2563EB;
+  --accent-light: #1E293B;
+  --accent-bg: rgba(59, 130, 246, 0.08);
+  --danger: #EF4444;
+  --danger-hover: #F87171;
+  --success: #22C55E;
+  --success-hover: #16A34A;
+  --warning: #F59E0B;
+  --warning-hover: #FBBF24;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.35), 0 28px 56px rgba(0, 0, 0, 0.5);
-  --shadow-accent: 0 6px 16px rgba(193, 84, 31, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-accent: none;
 }
 
 * {
@@ -65,22 +79,22 @@ html {
 
 body {
   font-family: var(--font-body);
-  background:
-    radial-gradient(1100px 520px at 108% -8%, var(--accent-bg), transparent 58%),
-    radial-gradient(800px 460px at -12% 112%, rgba(232, 221, 196, 0.4), transparent 55%),
-    var(--bg);
-  background-attachment: fixed;
+  background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--dur-slow) var(--ease-in-out), color var(--dur-slow) var(--ease-in-out);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
   color: var(--text);
+}
+
+a {
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 ::selection {
@@ -98,6 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 9999px;
+  transition: background-color var(--dur-fast) var(--ease-out);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-light);
@@ -110,7 +125,7 @@ table {
 thead th {
   text-align: left;
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-light);
@@ -124,7 +139,7 @@ tbody td {
 }
 tbody tr {
   border-bottom: 1px solid var(--border);
-  transition: background 0.15s ease;
+  transition: background var(--dur-fast) var(--ease-out);
 }
 tbody tr:last-child {
   border-bottom: none;
@@ -133,20 +148,53 @@ tbody tr:hover {
   background: var(--bg-secondary);
 }
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 @layer components {
 
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 1rem;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    transition: border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
   }
 
   .card-hover:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
-    border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+    border-color: var(--accent);
   }
 
   .card-flat {
@@ -161,16 +209,24 @@ tbody tr:hover {
     gap: 0.5rem;
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--font-display);
     border-radius: 0.75rem;
     cursor: pointer;
-    transition: all 0.18s ease;
+    transition: transform var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
     user-select: none;
     white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
   }
   .btn:active {
-    transform: scale(0.97);
+    transform: translateY(0) scale(0.98);
   }
   .btn:focus-visible {
     outline: none;
@@ -178,30 +234,25 @@ tbody tr:hover {
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    background: var(--accent);
     color: #fff;
-    box-shadow: var(--shadow-accent);
   }
   .btn-primary:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px color-mix(in srgb, var(--accent) 35%, transparent);
+    background: var(--accent-hover);
   }
 
   .btn-danger {
-    background: linear-gradient(135deg, var(--danger), var(--danger-hover));
+    background: var(--danger);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
   }
   .btn-danger:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
+    background: var(--danger-hover);
   }
 
   .btn-ghost {
-    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    background: transparent;
     color: var(--text);
-    border: 1px solid var(--border);
+    border-color: var(--border);
   }
   .btn-ghost:hover {
     background: var(--bg-secondary);
@@ -211,11 +262,10 @@ tbody tr:hover {
   .btn-secondary {
     background: transparent;
     color: var(--accent);
-    border: 1.5px solid var(--accent);
+    border-color: var(--accent);
   }
   .btn-secondary:hover {
     background: var(--accent-light);
-    transform: translateY(-1px);
   }
 
   .btn-ghost-danger {
@@ -238,7 +288,9 @@ tbody tr:hover {
     border-radius: 0.75rem;
     color: var(--text);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
   }
   .input:focus,
   .select:focus,
@@ -271,10 +323,10 @@ tbody tr:hover {
     inset: 0;
     background: var(--border);
     border-radius: 9999px;
-    transition: background 0.2s ease;
+    transition: background-color var(--dur-base) var(--ease-in-out);
   }
   .toggle.active .toggle-track {
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+    background: var(--accent);
   }
   .toggle-knob {
     position: absolute;
@@ -284,8 +336,8 @@ tbody tr:hover {
     height: 1.25rem;
     background: #fff;
     border-radius: 9999px;
-    transition: transform 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    transition: transform var(--dur-base) var(--ease-spring);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.15);
   }
   .toggle.active .toggle-knob {
     transform: translateX(1.125rem);
@@ -295,32 +347,30 @@ tbody tr:hover {
     display: inline-block;
     padding: 0.25rem 0.625rem;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 9999px;
     white-space: nowrap;
+    transition: background-color var(--dur-base) var(--ease-in-out),
+      color var(--dur-base) var(--ease-in-out);
   }
 
   .badge-new { background: var(--accent-light); color: var(--accent); }
-  .dark .badge-new { background: var(--accent-light); color: var(--accent-hover); }
-  .badge-accepted { background: #fefce8; color: var(--warning); }
-  .dark .badge-accepted { background: #3a2e1a; color: #fde047; }
-  .badge-coming { background: #f5f3ff; color: #7c3aed; }
-  .dark .badge-coming { background: #2e1a4a; color: #c4b5fd; }
-  .badge-in_progress { background: #eef2ff; color: #4338ca; }
-  .dark .badge-in_progress { background: #1a1a4a; color: #a5b4fc; }
-  .badge-completed { background: #f0fdf4; color: var(--success); }
-  .dark .badge-completed { background: #1a2e1a; color: #86efac; }
-  .badge-failed { background: #fef2f2; color: var(--danger); }
-  .dark .badge-failed { background: #3a1a1a; color: #fca5a5; }
+  .badge-accepted, .badge-coming, .badge-in_progress { background: #F1F5F9; color: #475569; }
+  .dark .badge-accepted, .dark .badge-coming, .dark .badge-in_progress { background: #1E293B; color: #94A3B8; }
+  .badge-completed { background: #F0FDF4; color: var(--success); }
+  .dark .badge-completed { background: #14291D; color: var(--success); }
+  .badge-failed { background: #FEF2F2; color: var(--danger); }
+  .dark .badge-failed { background: #2A1515; color: var(--danger); }
 
   .tab {
     padding: 0.625rem 1rem;
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--font-display);
     cursor: pointer;
     color: var(--text-secondary);
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
     border-bottom: 2px solid transparent;
   }
   .tab:hover {
@@ -332,15 +382,18 @@ tbody tr:hover {
   }
 
   .nav-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     padding: 0.625rem 0.875rem;
     font-size: 0.875rem;
     font-weight: 500;
-    border-radius: 0.625rem;
+    border-radius: 0.75rem;
     color: var(--text-secondary);
-    transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
   .nav-item:hover {
     color: var(--text);
@@ -348,9 +401,20 @@ tbody tr:hover {
     transform: translateX(2px);
   }
   .nav-item.active {
-    color: #fff;
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-    box-shadow: var(--shadow-accent);
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    border-radius: 0 9999px 9999px 0;
+    background: var(--accent);
+    animation: popIn var(--dur-base) var(--ease-spring);
   }
 
   .progress {
@@ -360,10 +424,12 @@ tbody tr:hover {
     overflow: hidden;
   }
   .progress-fill {
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-active));
+    background: var(--accent);
     border-radius: 9999px;
-    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: left;
+    transition: transform var(--dur-slower) var(--ease-out);
   }
 
   .skeleton {
@@ -371,13 +437,14 @@ tbody tr:hover {
     overflow: hidden;
     background: var(--bg-secondary);
     border-radius: 0.75rem;
+    animation: skeletonPulse 1.6s var(--ease-in-out) infinite;
   }
   .skeleton::after {
     content: '';
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
     animation: shimmer 1.6s infinite;
   }
   .dark .skeleton::after {
@@ -388,17 +455,18 @@ tbody tr:hover {
   }
 
   .stat {
-    padding: 1.25rem;
+    padding: 1.5rem;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 1rem;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    transition: border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out);
   }
   .stat:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
-    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+    border-color: var(--accent);
   }
   .stat-icon {
     width: 2.75rem;
@@ -407,16 +475,20 @@ tbody tr:hover {
     align-items: center;
     justify-content: center;
     border-radius: 0.875rem;
-    color: #fff;
-    box-shadow: var(--shadow-accent);
+    color: var(--accent);
+    background: var(--accent-light);
+    transition: transform var(--dur-base) var(--ease-out);
   }
-  .stat-icon-blue { background: linear-gradient(135deg, var(--accent), var(--accent-active)); }
-  .stat-icon-green { background: linear-gradient(135deg, var(--success), #15803d); }
-  .stat-icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-  .stat-icon-orange { background: linear-gradient(135deg, var(--warning), #b45309); }
+  .stat:hover .stat-icon {
+    transform: scale(1.06);
+  }
+  .stat-icon-blue, .stat-icon-green, .stat-icon-purple, .stat-icon-orange {
+    color: var(--accent);
+    background: var(--accent-light);
+  }
   .stat-value {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     font-family: var(--font-display);
     line-height: 1;
   }
@@ -424,14 +496,14 @@ tbody tr:hover {
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(20, 12, 6, 0.5);
-    backdrop-filter: blur(6px);
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 100;
     padding: 1rem;
-    animation: fadeIn 0.2s ease-out forwards;
+    animation: overlayIn var(--dur-base) var(--ease-out) both;
   }
   .modal {
     background: var(--surface);
@@ -440,29 +512,28 @@ tbody tr:hover {
     box-shadow: var(--shadow-lg);
     width: 100%;
     max-width: 32rem;
-    animation: scaleIn 0.2s ease-out forwards;
+    animation: modalIn var(--dur-slow) var(--ease-out) both;
+    will-change: transform, opacity;
   }
 
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
-    box-shadow: 8px 0 32px rgba(43, 26, 15, 0.05);
+    box-shadow: 2px 0 20px rgba(15, 23, 42, 0.05);
+    transition: transform var(--dur-slow) var(--ease-out);
   }
   .dark .sidebar {
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.25);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
   }
 
   .avatar {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--accent-light), var(--accent-bg));
+    background: var(--accent-light);
     color: var(--accent);
-    font-weight: 700;
+    font-weight: 600;
     font-family: var(--font-display);
-  }
-  .dark .avatar {
-    background: linear-gradient(135deg, var(--accent-light), rgba(193, 84, 31, 0.05));
   }
 
   .pill {
@@ -476,7 +547,10 @@ tbody tr:hover {
     border: 1px solid var(--border);
     border-radius: 9999px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: transform var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
   }
   .pill:hover {
     border-color: var(--accent);
@@ -484,10 +558,10 @@ tbody tr:hover {
     background: var(--accent-light);
   }
   .pill.active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-    border-color: transparent;
+    background: var(--accent);
+    border-color: var(--accent);
     color: #fff;
-    box-shadow: var(--shadow-accent);
+    transform: scale(1.02);
   }
 
   .error {
@@ -497,6 +571,7 @@ tbody tr:hover {
     padding: 0.625rem 0.875rem;
     font-size: 0.8125rem;
     border-radius: 0.75rem;
+    animation: fadeInUp var(--dur-fast) var(--ease-out) both;
   }
 }
 
@@ -504,4 +579,13 @@ tbody tr:hover {
   width: 100%;
   height: 100%;
   z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

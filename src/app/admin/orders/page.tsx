@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { adminAPI } from '@/lib/api'
 import StatusBadge from '@/components/StatusBadge'
+import { SkeletonTableRows } from '@/components/ui/Skeleton'
 import { formatDate } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +11,7 @@ export default function AdminOrdersPage() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<any[]>([])
   const [statusFilter, setStatusFilter] = useState('')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadOrders()
@@ -22,6 +24,7 @@ export default function AdminOrdersPage() {
     let data = res.data.results || res.data
     if (statusFilter) data = data.filter((o: any) => o.status === statusFilter)
     setOrders(data)
+    setLoading(false)
   }
 
   const statuses = ['new', 'accepted', 'coming', 'in_progress', 'completed', 'failed']
@@ -62,6 +65,7 @@ export default function AdminOrdersPage() {
               </tr>
             </thead>
             <tbody>
+              {loading && <SkeletonTableRows rows={5} cols={6} />}
               {orders.map((o: any) => (
                 <tr key={o.id}>
                   <td className="font-medium">{o.title}</td>

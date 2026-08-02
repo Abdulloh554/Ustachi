@@ -26,7 +26,7 @@ export default function RoutingControl({ origin, destination, onClear }: Props) 
       fitSelectedRoutes: true,
       lineOptions: {
         styles: [{
-          color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8B3103',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2563EB',
           weight: 4,
           opacity: 0.8,
         }],

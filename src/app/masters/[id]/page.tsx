@@ -63,7 +63,7 @@ export default function MasterDetailPage() {
         style={{ background: 'rgba(var(--bg-rgb), 0.78)' }}>
         <div className="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-accent">
+            <span className="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center">
               <Wrench size={16} className="text-white" />
             </span>
             <span className="font-display font-extrabold">{t('app.name')}</span>

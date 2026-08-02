@@ -53,6 +53,8 @@
   "sidebar.dark_mode": "Tungi rejim",
   "sidebar.logout": "Chiqish",
   "sidebar.reviews": "Baholashlar",
+  "sidebar.nav": "Menyu",
+  "sidebar.account": "Hisob",
 
   "reviews.rate_title": "Buyurtmani baholang",
   "reviews.rate_desc": "Usta ishini 5 yulduzgacha baholang",

@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
 import { authAPI } from '@/lib/api'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 
 export default function ClientSettingsPage() {
-  const { user, setUser } = useAuthStore()
+  const { user, setUser, isLoading } = useAuthStore()
   const { theme, toggle } = useThemeStore()
   const { t } = useTranslation()
   const [passwordForm, setPasswordForm] = useState({ old_password: '', new_password: '' })
@@ -27,6 +28,27 @@ export default function ClientSettingsPage() {
     setPasswordForm({ old_password: '', new_password: '' })
     setPassSuccess(true)
     setTimeout(() => setPassSuccess(false), 2000)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="max-w-2xl space-y-6">
+        <Skeleton className="h-7 w-40 rounded-lg" />
+        <div className="card p-6">
+          <Skeleton className="h-4 w-40 rounded-lg mb-4" />
+          <Skeleton className="h-10 w-full rounded-xl" />
+        </div>
+        <div className="card p-6">
+          <Skeleton className="h-4 w-40 rounded-lg mb-4" />
+          <Skeleton className="h-10 w-full rounded-xl" />
+        </div>
+        <div className="card p-6">
+          <Skeleton className="h-4 w-40 rounded-lg mb-4" />
+          <Skeleton className="h-10 w-full rounded-xl mb-3" />
+          <Skeleton className="h-10 w-full rounded-xl" />
+        </div>
+      </div>
+    )
   }
 
   return (

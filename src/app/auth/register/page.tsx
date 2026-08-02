@@ -6,7 +6,8 @@ import { useAuthStore } from '@/store/authStore'
 import { professionAPI } from '@/lib/api'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import { Wrench, User, ArrowLeft, Phone, Check } from 'lucide-react'
+import { Wrench, User, ArrowLeft, Phone, Check, Loader2 } from 'lucide-react'
+import { AuthPageSkeleton, SkeletonPills } from '@/components/ui/Skeleton'
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1)
@@ -22,13 +23,18 @@ export default function RegisterPage() {
     experience_years: 0,
   })
   const [professions, setProfessions] = useState<any[]>([])
+  const [professionsLoading, setProfessionsLoading] = useState(true)
   const [error, setError] = useState('')
-  const { register } = useAuthStore()
+  const [submitting, setSubmitting] = useState(false)
+  const { register, isLoading } = useAuthStore()
   const { t } = useTranslation()
   const router = useRouter()
 
   useEffect(() => {
-    professionAPI.list().then((res) => setProfessions(res.data.results || res.data))
+    professionAPI.list()
+      .then((res) => setProfessions(res.data.results || res.data))
+      .catch(() => setProfessions([]))
+      .finally(() => setProfessionsLoading(false))
   }, [])
 
   const handleChange = (field: string, value: any) => {
@@ -47,11 +53,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    if (form.role === 'master' && form.profession_ids.length === 0) {
+      setError(t('auth.choose_profession_required'))
+      return
+    }
+    setSubmitting(true)
     try {
-      if (form.role === 'master' && form.profession_ids.length === 0) {
-        setError(t('auth.choose_profession_required'))
-        return
-      }
       const user = await register({
         phone: form.phone,
         password: form.password,
@@ -81,30 +88,29 @@ export default function RegisterPage() {
       } else {
         setError(t('auth.error_occurred'))
       }
+    } finally {
+      setSubmitting(false)
     }
   }
 
   const isMaster = form.role === 'master'
 
+  if (isLoading) return <AuthPageSkeleton />
+
   return (
     <div className="min-h-screen flex">
       {/* Brand panel */}
       <div className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col justify-between p-12 text-white"
-        style={{ background: 'linear-gradient(160deg, var(--accent), var(--accent-active))' }}>
-        <div className="pointer-events-none absolute inset-0 opacity-25"
-          style={{ background: 'radial-gradient(500px 300px at 85% 10%, #fff, transparent 55%), radial-gradient(450px 320px at 5% 95%, #000, transparent 55%)' }} />
-        <div className="pointer-events-none absolute -bottom-32 -left-32 w-96 h-96 rounded-full border-[40px] border-white/10" />
-        <div className="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full border-[32px] border-white/10" />
-
+        style={{ background: 'var(--accent)' }}>
         <div className="relative flex items-center gap-3">
           <span className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
             <Wrench size={22} />
           </span>
-          <span className="font-display font-extrabold text-xl">{t('app.name')}</span>
+          <span className="font-display font-bold text-xl">{t('app.name')}</span>
         </div>
 
         <div className="relative max-w-sm">
-          <h2 className="font-display font-extrabold text-3xl leading-tight mb-4">
+          <h2 className="font-display font-bold text-3xl leading-tight mb-4">
             {t('landing.hero_title_1')} {t('landing.hero_title_2')}
           </h2>
           <p className="text-white/80 text-sm leading-relaxed mb-8">{t('landing.hero_desc')}</p>
@@ -127,13 +133,13 @@ export default function RegisterPage() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md animate-fade-in">
           <div className="lg:hidden flex items-center justify-center gap-2.5 mb-8">
-            <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-accent">
+            <span className="w-10 h-10 rounded-xl bg-[var(--accent)] flex items-center justify-center">
               <Wrench size={19} className="text-white" />
             </span>
-            <span className="font-display font-extrabold text-lg">{t('app.name')}</span>
+            <span className="font-display font-bold text-lg">{t('app.name')}</span>
           </div>
 
-          <h1 className="font-display text-2xl font-extrabold mb-1.5">{t('auth.register_title')}</h1>
+          <h1 className="font-display text-2xl font-bold mb-1.5">{t('auth.register_title')}</h1>
           <p className="text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>{t('auth.register_subtitle')}</p>
 
           {step === 1 && (
@@ -243,18 +249,22 @@ export default function RegisterPage() {
                   <>
                     <div>
                       <label className="block text-sm font-semibold mb-2">{t('auth.choose_profession')}</label>
-                      <div className="flex flex-wrap gap-2">
-                        {professions.map((prof) => (
-                          <button
-                            key={prof.id}
-                            type="button"
-                            onClick={() => toggleProfession(prof.id)}
-                            className={`pill text-sm ${form.profession_ids.includes(prof.id) ? 'active' : ''}`}
-                          >
-                            {prof.icon} {prof.name_uz}
-                          </button>
-                        ))}
-                      </div>
+                      {professionsLoading ? (
+                        <SkeletonPills />
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {professions.map((prof) => (
+                            <button
+                              key={prof.id}
+                              type="button"
+                              onClick={() => toggleProfession(prof.id)}
+                              className={`pill text-sm ${form.profession_ids.includes(prof.id) ? 'active' : ''}`}
+                            >
+                              {prof.icon} {prof.name_uz}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-semibold mb-1.5">{t('auth.about_self')}</label>
@@ -279,7 +289,8 @@ export default function RegisterPage() {
 
                 {error && <p className="error">{error}</p>}
 
-                <button type="submit" className="btn btn-primary w-full py-2.5 font-bold">
+                <button type="submit" className="btn btn-primary w-full py-2.5 font-bold" disabled={submitting}>
+                  {submitting && <Loader2 size={16} className="inline animate-spin mr-2" />}
                   {t('auth.register_btn')}
                 </button>
               </form>

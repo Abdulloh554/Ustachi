@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { masterAPI, orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import OrderCard from '@/components/OrderCard'
+import { SkeletonCardList } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 import { Wallet } from 'lucide-react'
 
@@ -14,6 +15,7 @@ export default function MasterOrdersPage() {
   const { t } = useTranslation()
   const [availableOrders, setAvailableOrders] = useState<any[]>([])
   const [myOrders, setMyOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<'available' | 'my'>('available')
   const [balance, setBalance] = useState<number | null>(null)
   const [error, setError] = useState('')
@@ -36,6 +38,7 @@ export default function MasterOrdersPage() {
   const loadAvailable = async () => {
     const res = await masterAPI.availableOrders()
     setAvailableOrders(res.data.results || res.data)
+    setLoading(false)
   }
 
   const loadMyOrders = async () => {
@@ -106,35 +109,49 @@ export default function MasterOrdersPage() {
 
       {tab === 'available' && (
         <div className="space-y-4">
-          {availableOrders.length === 0 && (
-            <p className="text-text-secondary text-center py-12">{t('order.no_new')}</p>
+          {loading ? (
+            <SkeletonCardList count={3} />
+          ) : (
+            <>
+              {availableOrders.length === 0 && (
+                <p className="text-text-secondary text-center py-12">{t('order.no_new')}</p>
+              )}
+              {availableOrders.map((order: any, index) => (
+                <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+                  <OrderCard
+                    order={order}
+                    showActions
+                    acceptPrice={ACCEPT_PRICE}
+                    acceptDisabled={!canAccept}
+                    onAccept={() => handleAccept(order.id)}
+                  />
+                </div>
+              ))}
+            </>
           )}
-          {availableOrders.map((order: any) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              showActions
-              acceptPrice={ACCEPT_PRICE}
-              acceptDisabled={!canAccept}
-              onAccept={() => handleAccept(order.id)}
-            />
-          ))}
         </div>
       )}
 
       {tab === 'my' && (
         <div className="space-y-4">
-          {myOrders.length === 0 && (
-            <p className="text-text-secondary text-center py-12">{t('order.no_active')}</p>
+          {loading ? (
+            <SkeletonCardList count={3} />
+          ) : (
+            <>
+              {myOrders.length === 0 && (
+                <p className="text-text-secondary text-center py-12">{t('order.no_active')}</p>
+              )}
+              {myOrders.map((order: any, index) => (
+                <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+                  <OrderCard
+                    order={order}
+                    showActions
+                    onStatusChange={(status) => handleStatusChange(order.id, status)}
+                  />
+                </div>
+              ))}
+            </>
           )}
-          {myOrders.map((order: any) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              showActions
-              onStatusChange={(status) => handleStatusChange(order.id, status)}
-            />
-          ))}
         </div>
       )}
     </div>

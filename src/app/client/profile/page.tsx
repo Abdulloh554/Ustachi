@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { authAPI } from '@/lib/api'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 
 export default function ClientProfilePage() {
-  const { user, setUser } = useAuthStore()
+  const { user, setUser, isLoading } = useAuthStore()
   const { t } = useTranslation()
   const [form, setForm] = useState({
     first_name: user?.first_name || '',
@@ -18,6 +19,28 @@ export default function ClientProfilePage() {
     e.preventDefault()
     const res = await authAPI.updateProfile(form)
     setUser(res.data)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="max-w-2xl space-y-4">
+        <Skeleton className="h-7 w-40 rounded-lg" />
+        <div className="card p-6">
+          <div className="flex items-center gap-4 mb-6">
+            <Skeleton className="w-14 h-14 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32 rounded-lg" />
+              <Skeleton className="h-3 w-28 rounded-lg" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Skeleton className="h-10 w-full rounded-xl" />
+            <Skeleton className="h-10 w-full rounded-xl" />
+          </div>
+          <Skeleton className="h-10 w-full rounded-xl mt-4" />
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -35,6 +35,8 @@ const adminLinks = [
   { href: '/admin/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
+type SidebarLink = (typeof clientLinks)[number]
+
 export default function Sidebar() {
   const pathname = usePathname()
   const { user, logout } = useAuthStore()
@@ -42,7 +44,7 @@ export default function Sidebar() {
   const { t } = useTranslation()
 
   const role = user?.role || 'client'
-  let links = clientLinks
+  let links: SidebarLink[] = clientLinks
   if (role === 'master') links = masterLinks
   if (role === 'admin') links = adminLinks
 
@@ -61,69 +63,93 @@ export default function Sidebar() {
 
   const initial = (user?.first_name?.[0] || user?.phone?.[0] || '?').toUpperCase()
 
+  const isAccount = (href: string) => href.includes('/profile') || href.includes('/settings')
+  const mainLinks = links.filter((l) => !isAccount(l.href))
+  const accountLinks = links.filter((l) => isAccount(l.href))
+
+  const renderLink = (link: SidebarLink, index: number) => {
+    const Icon = link.icon
+    const isActive = pathname === link.href
+    return (
+      <Link
+        key={link.href}
+        href={link.href}
+        style={{ animationDelay: `${index * 0.05}s` }}
+        className={`nav-item ${isActive ? 'active' : ''}`}
+      >
+        <Icon size={18} strokeWidth={isActive ? 2.4 : 2} />
+        <span className="font-medium">{t(link.labelKey)}</span>
+        {link.href === '/master/reviews' && reviewCount > 0 && (
+          <span className="ml-auto text-[10px] font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-white bg-[var(--accent)]">
+            {reviewCount}
+          </span>
+        )}
+      </Link>
+    )
+  }
+
   return (
     <aside className="sidebar fixed left-0 top-0 h-full w-64 flex flex-col z-50 animate-slide-in">
-      <div className="p-5 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2.5">
-          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-hover)] flex items-center justify-center shadow-accent">
-            <Wrench size={18} className="text-white" />
+      {/* Brand */}
+      <div className="px-5 pt-6 pb-5 bg-[var(--accent)] text-white">
+        <div className="flex items-center gap-3">
+          <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+            <Wrench size={19} />
           </span>
-          <div>
-            <h1 className="font-display font-extrabold text-base leading-tight">{t('app.name')}</h1>
-            <p className="text-[11px] font-medium capitalize" style={{ color: 'var(--text-light)' }}>
-              {t(`role.${role}`)}
-            </p>
+          <div className="min-w-0">
+            <h1 className="font-display font-bold text-base leading-tight text-white">{t('app.name')}</h1>
+            <p className="text-[11px] text-white/80 capitalize">{t(`role.${role}`)}</p>
           </div>
         </div>
+        <div className="mt-5 h-px bg-white/20" />
+        <p className="mt-3 text-[10px] uppercase tracking-widest text-white/70">{t('app.name')}</p>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        {links.map((link, i) => {
-          const Icon = link.icon
-          const isActive = pathname === link.href
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{ animationDelay: `${i * 0.05}s` }}
-              className={`nav-item ${isActive ? 'active' : ''} ${isActive ? 'text-white' : ''}`}
-            >
-              <Icon size={18} strokeWidth={isActive ? 2.4 : 2} />
-              <span className="font-medium">{t(link.labelKey)}</span>
-              {link.href === '/master/reviews' && reviewCount > 0 && (
-                <span className="ml-auto text-[10px] font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-white"
-                  style={{ background: 'var(--accent)' }}>
-                  {reviewCount}
-                </span>
-              )}
-            </Link>
-          )
-        })}
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        <p className="px-3 pb-1.5 text-[10px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-light)' }}>
+          {t('sidebar.nav')}
+        </p>
+        {mainLinks.map(renderLink)}
+        {accountLinks.length > 0 && (
+          <>
+            <p className="px-3 pt-4 pb-1.5 text-[10px] font-medium uppercase tracking-widest" style={{ color: 'var(--text-light)' }}>
+              {t('sidebar.account')}
+            </p>
+            {accountLinks.map(renderLink)}
+          </>
+        )}
       </nav>
 
-      <div className="p-3 border-t border-[var(--border)] space-y-1">
-        <div className="flex items-center gap-3 px-2 py-2.5 mb-1">
-          <div className="avatar w-9 h-9 rounded-full text-sm">{initial}</div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold truncate">{user?.first_name || user?.phone}</p>
-            <p className="text-[11px] truncate" style={{ color: 'var(--text-light)' }}>{user?.phone}</p>
+      {/* Bottom */}
+      <div className="p-3">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)]/60 p-3">
+          <div className="flex items-center gap-3">
+            <div className="avatar w-10 h-10 rounded-full text-sm shrink-0">{initial}</div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold truncate">{user?.first_name || user?.phone}</p>
+              <p className="text-[11px] truncate" style={{ color: 'var(--text-light)' }}>{user?.phone}</p>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-3">
+            <button
+              onClick={toggle}
+              className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] transition-colors hover:bg-[var(--bg-secondary)]"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+              {theme === 'dark' ? t('sidebar.light_mode') : t('sidebar.dark_mode')}
+            </button>
+            <button
+              onClick={logout}
+              className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg border border-transparent transition-colors hover:bg-[color-mix(in_srgb,var(--danger)_8%,transparent)]"
+              style={{ color: 'var(--danger)' }}
+            >
+              <LogOut size={14} />
+              {t('sidebar.logout')}
+            </button>
           </div>
         </div>
-        <button
-          onClick={toggle}
-          className="nav-item w-full"
-        >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          {theme === 'dark' ? t('sidebar.light_mode') : t('sidebar.dark_mode')}
-        </button>
-        <button
-          onClick={logout}
-          className="nav-item w-full"
-          style={{ color: 'var(--danger)' }}
-        >
-          <LogOut size={18} />
-          {t('sidebar.logout')}
-        </button>
       </div>
     </aside>
   )

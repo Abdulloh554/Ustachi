@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { adminAPI } from '@/lib/api'
+import { SkeletonTableRows } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 
 export default function AdminMastersPage() {
   const { t } = useTranslation()
   const [masters, setMasters] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    adminAPI.masters().then((res) => setMasters(res.data.results || res.data))
+    adminAPI.masters().then((res) => {
+      setMasters(res.data.results || res.data)
+      setLoading(false)
+    })
   }, [])
 
   return (
@@ -30,6 +35,7 @@ export default function AdminMastersPage() {
               </tr>
             </thead>
             <tbody>
+              {loading && <SkeletonTableRows rows={5} cols={6} />}
               {masters.map((m: any) => (
                 <tr key={m.id}>
                   <td>{m.user?.first_name || m.user?.phone}</td>

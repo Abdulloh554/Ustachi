@@ -53,6 +53,8 @@
   "sidebar.dark_mode": "Тёмный режим",
   "sidebar.logout": "Выйти",
   "sidebar.reviews": "Отзывы",
+  "sidebar.nav": "Меню",
+  "sidebar.account": "Аккаунт",
 
   "reviews.rate_title": "Оцените заказ",
   "reviews.rate_desc": "Оцените работу мастера до 5 звёзд",

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { orderAPI, professionAPI, reviewAPI } from '@/lib/api'
 import OrderCard from '@/components/OrderCard'
+import { SkeletonCardList } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 import { Plus, X, Star } from 'lucide-react'
 
@@ -10,6 +11,7 @@ export default function ClientOrdersPage() {
   const { t } = useTranslation()
   const [orders, setOrders] = useState<any[]>([])
   const [professions, setProfessions] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [pending, setPending] = useState<any[]>([])
   const [rating, setRating] = useState(0)
@@ -27,6 +29,7 @@ export default function ClientOrdersPage() {
     const all = res.data.results || res.data
     setOrders(all)
     setPending(all.filter((o: any) => o.status === 'completed' && !o.my_review))
+    setLoading(false)
   }
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -74,12 +77,20 @@ export default function ClientOrdersPage() {
       </div>
 
       <div className="space-y-3">
-        {orders.length === 0 && (
-          <p className="text-center py-12 text-sm" style={{ color: 'var(--text-light)' }}>{t('client.no_orders')}</p>
+        {loading ? (
+          <SkeletonCardList count={3} />
+        ) : (
+          <>
+            {orders.length === 0 && (
+              <p className="text-center py-12 text-sm" style={{ color: 'var(--text-light)' }}>{t('client.no_orders')}</p>
+            )}
+            {orders.map((order: any, index) => (
+              <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+                <OrderCard order={order} />
+              </div>
+            ))}
+          </>
         )}
-        {orders.map((order: any) => (
-          <OrderCard key={order.id} order={order} />
-        ))}
       </div>
 
       {showModal && (

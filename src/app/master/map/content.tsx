@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
+import { Skeleton, SkeletonMap } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 import { MapPin, Navigation, X } from 'lucide-react'
 import L from 'leaflet'
@@ -36,6 +37,7 @@ export default function MasterMapContent() {
   const { user } = useAuthStore()
   const { t } = useTranslation()
   const [orders, setOrders] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [routeDest, setRouteDest] = useState<[number, number] | null>(null)
   const [browserLoc, setBrowserLoc] = useState<[number, number] | null>(null)
 
@@ -43,6 +45,7 @@ export default function MasterMapContent() {
     orderAPI.list().then((res) => {
       const all = res.data.results || res.data
       setOrders(all.filter((o: any) => ['accepted', 'coming', 'in_progress'].includes(o.status)))
+      setLoading(false)
     })
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -79,8 +82,11 @@ export default function MasterMapContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
-          <div className="h-[600px] rounded-xl overflow-hidden border border-border">
-            <MapContainer
+          {loading ? (
+            <SkeletonMap />
+          ) : (
+            <div className="h-[600px] rounded-xl overflow-hidden border border-border">
+              <MapContainer
               center={center}
               zoom={12}
               className="w-full h-full"
@@ -118,7 +124,8 @@ export default function MasterMapContent() {
                 <RoutingControl origin={origin} destination={routeDest} onClear={() => setRouteDest(null)} />
               )}
             </MapContainer>
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="space-y-3">
@@ -133,35 +140,45 @@ export default function MasterMapContent() {
               </button>
             )}
           </div>
-          {orders.length === 0 && (
-            <p className="text-sm text-text-secondary">{t('order.no_active')}</p>
-          )}
-          {orders.map((order: any) => (
-            <div
-              key={order.id}
-              className="bg-surface rounded-lg p-4 border border-border"
-            >
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-medium text-sm">{order.title}</h3>
-                <span className="text-xs text-text-light capitalize">{order.status}</span>
-              </div>
-              {order.address && (
-                <p className="text-xs text-text-secondary flex items-center gap-1 mb-2">
-                  <MapPin size={12} /> {order.address}
-                </p>
-              )}
-              <button
-                onClick={() => {
-                  if (order.location_lat && order.location_lng) {
-                    setRouteDest([order.location_lat, order.location_lng])
-                  }
-                }}
-                className="flex items-center gap-1 text-xs text-accent hover:underline"
-              >
-                <Navigation size={12} /> {t('order.route')}
-              </button>
+          {loading ? (
+            <div className="space-y-3">
+              <Skeleton className="h-20 rounded-lg w-full" />
+              <Skeleton className="h-20 rounded-lg w-full" />
+              <Skeleton className="h-20 rounded-lg w-full" />
             </div>
-          ))}
+          ) : (
+            <>
+              {orders.length === 0 && (
+                <p className="text-sm text-text-secondary">{t('order.no_active')}</p>
+              )}
+              {orders.map((order: any) => (
+                <div
+                  key={order.id}
+                  className="bg-surface rounded-lg p-4 border border-border"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-medium text-sm">{order.title}</h3>
+                    <span className="text-xs text-text-light capitalize">{order.status}</span>
+                  </div>
+                  {order.address && (
+                    <p className="text-xs text-text-secondary flex items-center gap-1 mb-2">
+                      <MapPin size={12} /> {order.address}
+                    </p>
+                  )}
+                  <button
+                    onClick={() => {
+                      if (order.location_lat && order.location_lng) {
+                        setRouteDest([order.location_lat, order.location_lng])
+                      }
+                    }}
+                    className="flex items-center gap-1 text-xs text-accent hover:underline"
+                  >
+                    <Navigation size={12} /> {t('order.route')}
+                  </button>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>

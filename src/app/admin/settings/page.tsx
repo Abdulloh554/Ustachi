@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { settingsAPI } from '@/lib/api'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 
 const fields = [
@@ -98,7 +99,26 @@ export default function AdminSettingsPage() {
     }
   }
 
-  if (loading) return <p className="text-sm" style={{ color: 'var(--text-light)' }}>{t('common.loading')}</p>
+  if (loading) {
+    return (
+      <div className="max-w-3xl space-y-6">
+        <Skeleton className="h-7 w-56 rounded-lg" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="card p-6">
+            <Skeleton className="h-4 w-40 rounded-lg mb-4" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              {Array.from({ length: 4 }).map((_, j) => (
+                <div key={j}>
+                  <Skeleton className="h-3 w-24 rounded-lg mb-2" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-3xl space-y-6">
