@@ -97,6 +97,8 @@
   "order.my_location": "Моё местоположение",
   "order.price_label": "сум",
   "order.no_price": "-",
+  "order.show_more": "Ещё",
+  "order.show_less": "Скрыть",
   "order.not_found": "Мастер не найден или недоступен",
 
   "status.new": "Новый",

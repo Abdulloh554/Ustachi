@@ -97,6 +97,8 @@
   "order.my_location": "Mening joylashuvim",
   "order.price_label": "so'm",
   "order.no_price": "-",
+  "order.show_more": "Ko'proq",
+  "order.show_less": "Yopish",
   "order.not_found": "Usta topilmadi yoki mavjud emas",
 
   "status.new": "Yangi",

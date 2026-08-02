@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react'
 import { orderAPI, professionAPI, reviewAPI } from '@/lib/api'
 import OrderCard from '@/components/OrderCard'
+import EmptyState from '@/components/ui/EmptyState'
 import { SkeletonCardList } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
-import { Plus, X, Star } from 'lucide-react'
+import { Plus, X, Star, ClipboardList } from 'lucide-react'
 
 export default function ClientOrdersPage() {
   const { t } = useTranslation()
@@ -76,13 +77,24 @@ export default function ClientOrdersPage() {
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {loading ? (
           <SkeletonCardList count={3} />
         ) : (
           <>
             {orders.length === 0 && (
-              <p className="text-center py-12 text-sm" style={{ color: 'var(--text-light)' }}>{t('client.no_orders')}</p>
+              <EmptyState
+                icon={<ClipboardList size={24} />}
+                title={t('client.no_orders')}
+                action={
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="btn btn-primary"
+                  >
+                    <Plus size={16} /> {t('client.new_order')}
+                  </button>
+                }
+              />
             )}
             {orders.map((order: any, index) => (
               <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>

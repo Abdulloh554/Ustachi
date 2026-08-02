@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { masterAPI, orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import OrderCard from '@/components/OrderCard'
+import EmptyState from '@/components/ui/EmptyState'
 import { SkeletonCardList } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
-import { Wallet } from 'lucide-react'
+import { Wallet, Inbox, ClipboardList } from 'lucide-react'
 
 const ACCEPT_PRICE = 4999
 
@@ -114,7 +115,10 @@ export default function MasterOrdersPage() {
           ) : (
             <>
               {availableOrders.length === 0 && (
-                <p className="text-text-secondary text-center py-12">{t('order.no_new')}</p>
+                <EmptyState
+                  icon={<Inbox size={24} />}
+                  title={t('order.no_new')}
+                />
               )}
               {availableOrders.map((order: any, index) => (
                 <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
@@ -139,7 +143,10 @@ export default function MasterOrdersPage() {
           ) : (
             <>
               {myOrders.length === 0 && (
-                <p className="text-text-secondary text-center py-12">{t('order.no_active')}</p>
+                <EmptyState
+                  icon={<ClipboardList size={24} />}
+                  title={t('order.no_active')}
+                />
               )}
               {myOrders.map((order: any, index) => (
                 <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
