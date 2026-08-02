@@ -30,10 +30,13 @@ api.interceptors.response.use(
           localStorage.setItem('access_token', res.data.access)
           error.config.headers.Authorization = `Bearer ${res.data.access}`
           return axios(error.config)
-        } catch {
-          localStorage.removeItem('access_token')
-          localStorage.removeItem('refresh_token')
-          window.location.href = '/auth/login'
+        } catch (refreshErr: any) {
+          if (refreshErr.response) {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            localStorage.removeItem('user_cache')
+            window.location.href = '/auth/login'
+          }
         }
       }
     }
