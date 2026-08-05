@@ -59,8 +59,23 @@ export const orderAPI = {
   create: (data: any) => api.post('/orders/', data),
   detail: (id: number) => api.get(`/orders/${id}/`),
   accept: (id: number) => api.post(`/orders/${id}/accept/`),
+  cancel: (id: number) => api.post(`/orders/${id}/cancel/`),
   updateStatus: (id: number, status: string) => api.post(`/orders/${id}/update_status/`, { status }),
   logs: (id: number) => api.get(`/orders/${id}/logs/`),
+}
+
+export const chatAPI = {
+  listConversations: () => api.get('/chat/conversations/'),
+  messages: (id: number) => api.get(`/chat/conversations/${id}/messages/`),
+  send: (id: number, text: string) => api.post(`/chat/conversations/${id}/messages/`, { text }),
+}
+
+export function chatWebSocketUrl(conversationId: number): string {
+  const base = API_URL
+  const protocol = base.startsWith('https') ? 'wss' : 'ws'
+  const host = base.replace(/^https?:\/\//, '').replace(/\/api\/?$/, '')
+  const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') || '' : ''
+  return `${protocol}://${host}/ws/chat/${conversationId}/?token=${encodeURIComponent(token)}`
 }
 
 export const masterAPI = {

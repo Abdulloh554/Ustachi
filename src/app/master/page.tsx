@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react'
 import { masterAPI, orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
-import OrderCard from '@/components/OrderCard'
-import EmptyState from '@/components/ui/EmptyState'
-import { SkeletonCardList } from '@/components/ui/Skeleton'
+import OrdersSection from '@/components/master/OrdersSection'
+import BalanceBadge from '@/components/master/BalanceBadge'
 import { useTranslation } from 'react-i18next'
-import { Wallet, Inbox, ClipboardList } from 'lucide-react'
+import { Inbox, ClipboardList } from 'lucide-react'
 
 const ACCEPT_PRICE = 4999
 
@@ -72,18 +71,25 @@ export default function MasterOrdersPage() {
     }
   }
 
+  const handleCancel = async (id: number) => {
+    setError('')
+    try {
+      await orderAPI.cancel(id)
+      loadMyOrders()
+      loadAvailable()
+    } catch (err: any) {
+      const data = err.response?.data
+      setError(typeof data === 'string' ? data : data?.error || t('auth.error_occurred'))
+    }
+  }
+
   const canAccept = balance != null && balance >= ACCEPT_PRICE
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h1 className="text-xl font-bold">{t('sidebar.listings')}</h1>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm"
-          style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
-          <Wallet size={16} />
-          <span>{balance != null ? balance.toLocaleString('ru-RU') : '...'}</span>
-          <span className="font-medium opacity-80">{t('order.price_label')}</span>
-        </div>
+        <BalanceBadge balance={balance} />
       </div>
 
       {error && (
@@ -109,57 +115,26 @@ export default function MasterOrdersPage() {
       </div>
 
       {tab === 'available' && (
-        <div className="space-y-4">
-          {loading ? (
-            <SkeletonCardList count={3} />
-          ) : (
-            <>
-              {availableOrders.length === 0 && (
-                <EmptyState
-                  icon={<Inbox size={24} />}
-                  title={t('order.no_new')}
-                />
-              )}
-              {availableOrders.map((order: any, index) => (
-                <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
-                  <OrderCard
-                    order={order}
-                    showActions
-                    acceptPrice={ACCEPT_PRICE}
-                    acceptDisabled={!canAccept}
-                    onAccept={() => handleAccept(order.id)}
-                  />
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        <OrdersSection
+          orders={availableOrders}
+          loading={loading}
+          emptyIcon={Inbox}
+          emptyTitle={t('order.no_new')}
+          acceptPrice={ACCEPT_PRICE}
+          acceptDisabled={!canAccept}
+          onAccept={handleAccept}
+        />
       )}
 
       {tab === 'my' && (
-        <div className="space-y-4">
-          {loading ? (
-            <SkeletonCardList count={3} />
-          ) : (
-            <>
-              {myOrders.length === 0 && (
-                <EmptyState
-                  icon={<ClipboardList size={24} />}
-                  title={t('order.no_active')}
-                />
-              )}
-              {myOrders.map((order: any, index) => (
-                <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
-                  <OrderCard
-                    order={order}
-                    showActions
-                    onStatusChange={(status) => handleStatusChange(order.id, status)}
-                  />
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        <OrdersSection
+          orders={myOrders}
+          loading={loading}
+          emptyIcon={ClipboardList}
+          emptyTitle={t('order.no_active')}
+          onStatusChange={handleStatusChange}
+          onCancel={handleCancel}
+        />
       )}
     </div>
   )

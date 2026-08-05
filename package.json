@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^8.55.2",
     "@types/leaflet-routing-machine": "^3.2.9",
     "axios": "^1.7.0",
     "i18next": "^23.11.0",

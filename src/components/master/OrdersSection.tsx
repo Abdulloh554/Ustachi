@@ -1,0 +1,63 @@
+'use client'
+
+import { LucideIcon } from 'lucide-react'
+import OrderCard from '@/components/OrderCard'
+import EmptyState from '@/components/ui/EmptyState'
+import { SkeletonCardList } from '@/components/ui/Skeleton'
+
+interface OrdersSectionProps {
+  orders: any[]
+  loading: boolean
+  emptyIcon: LucideIcon
+  emptyTitle: string
+  acceptPrice?: number
+  acceptDisabled?: boolean
+  onAccept?: (id: number) => void
+  onStatusChange?: (id: number, status: string) => void
+  onCancel?: (id: number) => void
+}
+
+export default function OrdersSection({
+  orders,
+  loading,
+  emptyIcon,
+  emptyTitle,
+  acceptPrice,
+  acceptDisabled,
+  onAccept,
+  onStatusChange,
+  onCancel,
+}: OrdersSectionProps) {
+  const EmptyIcon = emptyIcon
+
+  return (
+    <div className="space-y-4">
+      {loading ? (
+        <SkeletonCardList count={3} />
+      ) : (
+        <>
+          {orders.length === 0 && (
+            <EmptyState icon={<EmptyIcon size={24} />} title={emptyTitle} />
+          )}
+          {orders.map((order: any, index) => (
+            <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+              <OrderCard
+                order={order}
+                showActions
+                acceptPrice={acceptPrice}
+                acceptDisabled={acceptDisabled}
+                onAccept={onAccept ? () => onAccept(order.id) : undefined}
+                onStatusChange={
+                  onStatusChange
+                    ? (status) => onStatusChange(order.id, status)
+                    : undefined
+                }
+                onCancel={onCancel ? () => onCancel(order.id) : undefined}
+              />
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  )
+}

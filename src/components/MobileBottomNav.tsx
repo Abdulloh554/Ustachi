@@ -44,7 +44,7 @@ export default function MobileBottomNav() {
       className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-[var(--border)] bg-[var(--surface)]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-5">
         {links.map((link) => {
           const Icon = link.icon
           const isActive = pathname === link.href

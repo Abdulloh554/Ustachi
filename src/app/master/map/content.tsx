@@ -5,11 +5,11 @@ import dynamic from 'next/dynamic'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { orderAPI } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
-import { Skeleton, SkeletonMap } from '@/components/ui/Skeleton'
+import { SkeletonMap } from '@/components/ui/Skeleton'
+import OrderRouteList from '@/components/map/OrderRouteList'
 import { useTranslation } from 'react-i18next'
-import { MapPin, Navigation, X } from 'lucide-react'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import  'leaflet/dist/leaflet.css'
 
 const defaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -76,6 +76,12 @@ export default function MasterMapContent() {
       ? [markers[0].lat, markers[0].lng]
       : [41.2995, 69.2401]
 
+  const handleRoute = (order: any) => {
+    if (order.location_lat && order.location_lng) {
+      setRouteDest([order.location_lat, order.location_lng])
+    }
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">{t('sidebar.map')}</h1>
@@ -87,99 +93,54 @@ export default function MasterMapContent() {
           ) : (
             <div className="h-[600px] rounded-xl overflow-hidden border border-border">
               <MapContainer
-              center={center}
-              zoom={12}
-              className="w-full h-full"
-              scrollWheelZoom
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {markers.map((m, i) => (
-                <Marker
-                  key={`${m.id || i}`}
-                  position={[m.lat, m.lng]}
-                  icon={defaultIcon}
-                >
-                  <Popup>
-                    <div className="text-sm">
-                      <p className="font-semibold">{m.title}</p>
-                      {m.status && <p className="text-xs text-text-secondary capitalize">{m.status}</p>}
-                      {m.address && <p className="text-xs text-text-secondary">{m.address}</p>}
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-              {browserLoc && (
-                <Marker position={browserLoc} icon={greenIcon}>
-                  <Popup>
-                    <div className="text-sm">
-                      <p className="font-semibold">{t('order.my_location')}</p>
-                    </div>
-                  </Popup>
-                </Marker>
-              )}
-              {routeDest && origin && (
-                <RoutingControl origin={origin} destination={routeDest} onClear={() => setRouteDest(null)} />
-              )}
-            </MapContainer>
+                center={center}
+                zoom={12}
+                className="w-full h-full"
+                scrollWheelZoom
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {markers.map((m, i) => (
+                  <Marker
+                    key={`${m.id || i}`}
+                    position={[m.lat, m.lng]}
+                    icon={defaultIcon}
+                  >
+                    <Popup>
+                      <div className="text-sm">
+                        <p className="font-semibold">{m.title}</p>
+                        {m.status && <p className="text-xs text-text-secondary capitalize">{m.status}</p>}
+                        {m.address && <p className="text-xs text-text-secondary">{m.address}</p>}
+                      </div>
+                    </Popup>
+                  </Marker>
+                ))}
+                {browserLoc && (
+                  <Marker position={browserLoc} icon={greenIcon}>
+                    <Popup>
+                      <div className="text-sm">
+                        <p className="font-semibold">{t('order.my_location')}</p>
+                      </div>
+                    </Popup>
+                  </Marker>
+                )}
+                {routeDest && origin && (
+                  <RoutingControl origin={origin} destination={routeDest} onClear={() => setRouteDest(null)} />
+                )}
+              </MapContainer>
             </div>
           )}
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold">{t('order.accepted')}</h2>
-            {routeDest && (
-              <button
-                onClick={() => setRouteDest(null)}
-                className="flex items-center gap-1 text-xs text-danger hover:underline"
-              >
-                <X size={14} /> {t('order.cancel_route')}
-              </button>
-            )}
-          </div>
-          {loading ? (
-            <div className="space-y-3">
-              <Skeleton className="h-20 rounded-lg w-full" />
-              <Skeleton className="h-20 rounded-lg w-full" />
-              <Skeleton className="h-20 rounded-lg w-full" />
-            </div>
-          ) : (
-            <>
-              {orders.length === 0 && (
-                <p className="text-sm text-text-secondary">{t('order.no_active')}</p>
-              )}
-              {orders.map((order: any) => (
-                <div
-                  key={order.id}
-                  className="bg-surface rounded-lg p-4 border border-border"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-medium text-sm">{order.title}</h3>
-                    <span className="text-xs text-text-light capitalize">{order.status}</span>
-                  </div>
-                  {order.address && (
-                    <p className="text-xs text-text-secondary flex items-center gap-1 mb-2">
-                      <MapPin size={12} /> {order.address}
-                    </p>
-                  )}
-                  <button
-                    onClick={() => {
-                      if (order.location_lat && order.location_lng) {
-                        setRouteDest([order.location_lat, order.location_lng])
-                      }
-                    }}
-                    className="flex items-center gap-1 text-xs text-accent hover:underline"
-                  >
-                    <Navigation size={12} /> {t('order.route')}
-                  </button>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        <OrderRouteList
+          orders={orders}
+          loading={loading}
+          routeActive={!!routeDest}
+          onRoute={handleRoute}
+          onClearRoute={() => setRouteDest(null)}
+        />
       </div>
     </div>
   )

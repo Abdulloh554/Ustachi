@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import StatusBadge from './StatusBadge'
+import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
-import { MapPin, Clock } from 'lucide-react'
+import { MapPin, Clock, MessageSquare, XCircle } from 'lucide-react'
+import OrderClientInfo from '@/components/order/OrderClientInfo'
+import OrderActions from '@/components/order/OrderActions'
 
 interface Order {
   id: number
@@ -14,29 +16,18 @@ interface Order {
   price: string | null
   address: string
   created_at: string
+  conversation_id?: number | null
   client_details?: { phone: string; first_name: string }
   master_details?: { phone: string; first_name: string }
 }
 
-const AVATAR_COLORS: [string, string][] = [
-  ['#EFF6FF', '#1D4ED8'],
-  ['#FEF3E2', '#B45309'],
-  ['#F0FDF4', '#15803D'],
-  ['#FEF2F2', '#B91C1C'],
-  ['#F5F3FF', '#6D28D9'],
-  ['#ECFEFF', '#0E7490'],
-]
-
-function pickAvatarColor(name: string): [string, string] {
-  let sum = 0
-  for (const ch of name) sum += ch.charCodeAt(0)
-  return AVATAR_COLORS[sum % AVATAR_COLORS.length]
-}
+const CANCELABLE = ['new', 'accepted', 'coming', 'in_progress', 'failed']
 
 export default function OrderCard({
   order,
   onAccept,
   onStatusChange,
+  onCancel,
   showActions,
   acceptPrice,
   acceptDisabled,
@@ -44,6 +35,7 @@ export default function OrderCard({
   order: Order
   onAccept?: () => void
   onStatusChange?: (status: string) => void
+  onCancel?: () => void
   showActions?: boolean
   acceptPrice?: number | null
   acceptDisabled?: boolean
@@ -59,32 +51,23 @@ export default function OrderCard({
   }, [expanded])
 
   const clientName = order.client_details?.first_name || order.client_details?.phone || '?'
-  const [avatarBg, avatarFg] = pickAvatarColor(clientName)
+
+  const handleCancelClick = () => {
+    if (window.confirm(t('order.cancel_confirm'))) {
+      onCancel?.()
+    }
+  }
+
+  const canCancel = CANCELABLE.includes(order.status) && !!onCancel
 
   return (
     <div className="order-card">
-      <div className="flex flex-col min-[640px]:flex-row min-[640px]:items-start min-[640px]:justify-between">
-        <div className="w-full min-w-0 min-[640px]:w-auto">
-          <h3 className="text-[18px] font-medium leading-snug">{order.title}</h3>
-          <div className="flex items-center gap-2.5 mt-2">
-            <span
-              className="avatar w-8 h-8 rounded-full text-xs shrink-0 min-[640px]:w-9 min-[640px]:h-9 min-[640px]:text-sm"
-              style={{ background: avatarBg, color: avatarFg }}
-            >
-              {clientName[0].toUpperCase()}
-            </span>
-            <span className="min-w-0">
-              <span className="block text-sm font-medium truncate">{clientName}</span>
-              <span className="block text-xs truncate" style={{ color: 'var(--text-light)' }}>
-                {order.client_details?.phone || t('role.client')}
-              </span>
-            </span>
-          </div>
-        </div>
-        <div className="shrink-0 self-end min-[640px]:self-auto">
-          <StatusBadge status={order.status} />
-        </div>
-      </div>
+      <OrderClientInfo
+        title={order.title}
+        name={clientName}
+        phone={order.client_details?.phone}
+        status={order.status}
+      />
 
       {order.description && (
         <div className="mt-4">
@@ -131,42 +114,36 @@ export default function OrderCard({
         )}
       </div>
 
-      {showActions && order.status === 'new' && onAccept && (
-        <button
-          onClick={onAccept}
-          disabled={acceptDisabled}
-          className="btn btn-primary mt-4 w-full py-2.5 font-bold"
-        >
-          {t('order.accept')}
-          {acceptPrice != null && (
-            <span className="ml-2 opacity-90">- {acceptPrice.toLocaleString('ru-RU')} {t('order.price_label')}</span>
+      {(order.conversation_id || canCancel) && (
+        <div className="mt-3 flex gap-2">
+          {order.conversation_id && (
+            <Link
+              href={`/chat/${order.conversation_id}`}
+              className="btn flex-1 py-2.5 font-semibold justify-center gap-2"
+              style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}
+            >
+              <MessageSquare size={16} /> {t('order.chat')}
+            </Link>
           )}
-        </button>
-      )}
-
-      {showActions && onStatusChange && (
-        <div className="mt-4 flex gap-2">
-          {order.status === 'accepted' && (
-            <button onClick={() => onStatusChange('coming')} className="btn btn-primary flex-1 py-2.5 font-bold">
-              {t('order.coming')}
+          {canCancel && (
+            <button
+              onClick={handleCancelClick}
+              className="btn btn-danger flex-1 py-2.5 font-semibold justify-center gap-2"
+            >
+              <XCircle size={16} /> {t('order.cancel')}
             </button>
-          )}
-          {order.status === 'coming' && (
-            <button onClick={() => onStatusChange('in_progress')} className="btn btn-primary flex-1 py-2.5 font-bold">
-              {t('order.in_progress')}
-            </button>
-          )}
-          {order.status === 'in_progress' && (
-            <>
-              <button onClick={() => onStatusChange('completed')} className="btn btn-primary flex-1 py-2.5 font-bold">
-                {t('order.completed')}
-              </button>
-              <button onClick={() => onStatusChange('failed')} className="btn btn-danger flex-1 py-2.5 font-bold">
-                {t('order.failed')}
-              </button>
-            </>
           )}
         </div>
+      )}
+
+      {showActions && (
+        <OrderActions
+          status={order.status}
+          onAccept={onAccept}
+          onStatusChange={onStatusChange}
+          acceptPrice={acceptPrice}
+          acceptDisabled={acceptDisabled}
+        />
       )}
     </div>
   )

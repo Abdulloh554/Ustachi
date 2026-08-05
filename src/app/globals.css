@@ -397,6 +397,8 @@ tbody tr:hover {
   .dark .badge-completed { background: #14291D; color: var(--success); --badge-dot: var(--success); }
   .badge-failed { background: #FEF2F2; color: var(--danger); --badge-dot: #B91C1C; }
   .dark .badge-failed { background: #2A1515; color: var(--danger); --badge-dot: var(--danger); }
+  .badge-cancelled { background: #F3F4F6; color: #6B7280; --badge-dot: #6B7280; }
+  .dark .badge-cancelled { background: #1F2937; color: #9CA3AF; --badge-dot: #9CA3AF; }
 
   .tab {
     padding: 0.625rem 1rem;

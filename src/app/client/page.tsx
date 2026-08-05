@@ -5,8 +5,10 @@ import { orderAPI, professionAPI, reviewAPI } from '@/lib/api'
 import OrderCard from '@/components/OrderCard'
 import EmptyState from '@/components/ui/EmptyState'
 import { SkeletonCardList } from '@/components/ui/Skeleton'
+import CreateOrderModal from '@/components/client/CreateOrderModal'
+import ReviewModal from '@/components/client/ReviewModal'
 import { useTranslation } from 'react-i18next'
-import { Plus, X, Star, ClipboardList } from 'lucide-react'
+import { Plus, ClipboardList } from 'lucide-react'
 
 export default function ClientOrdersPage() {
   const { t } = useTranslation()
@@ -15,10 +17,7 @@ export default function ClientOrdersPage() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [pending, setPending] = useState<any[]>([])
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [form, setForm] = useState({ title: '', description: '', profession: '', address: '', price: '', location_lat: 41.3, location_lng: 69.2 })
 
   useEffect(() => {
     loadOrders()
@@ -33,33 +32,38 @@ export default function ClientOrdersPage() {
     setLoading(false)
   }
 
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleCreate = async (form: any) => {
     await orderAPI.create({
       ...form,
       profession: form.profession ? parseInt(form.profession) : null,
     })
     setShowModal(false)
-    setForm({ title: '', description: '', profession: '', address: '', price: '', location_lat: 41.3, location_lng: 69.2 })
     loadOrders()
   }
 
-  const submitReview = async () => {
+  const submitReview = async (rating: number, comment: string) => {
     const current = pending[0]
-    if (!current || rating === 0 || submitting) return
+    if (!current) return
     setSubmitting(true)
     try {
       await reviewAPI.submit({ order: current.id, rating, comment })
       setOrders((prev) => prev.map((o) =>
         o.id === current.id ? { ...o, my_review: { rating, comment } } : o
       ))
-      setRating(0)
-      setComment('')
       setPending((prev) => prev.slice(1))
-    } catch {
-      // baholash muvaffaqiyatsiz
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handleCancel = async (id: number) => {
+    try {
+      await orderAPI.cancel(id)
+      loadOrders()
+    } catch (err: any) {
+      const data = err.response?.data
+      const message = typeof data === 'string' ? data : data?.error || t('auth.error_occurred')
+      window.alert(message)
     }
   }
 
@@ -98,7 +102,7 @@ export default function ClientOrdersPage() {
             )}
             {orders.map((order: any, index) => (
               <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
-                <OrderCard order={order} />
+                <OrderCard order={order} onCancel={() => handleCancel(order.id)} />
               </div>
             ))}
           </>
@@ -106,100 +110,19 @@ export default function ClientOrdersPage() {
       </div>
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold">{t('client.new_order')}</h2>
-              <button onClick={() => setShowModal(false)} className="btn btn-ghost p-1"><X size={18} /></button>
-            </div>
-            <form onSubmit={handleCreate} className="space-y-3">
-              <input
-                placeholder={t('order.title')}
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                className="input"
-                required
-              />
-              <textarea
-                placeholder={t('order.description')}
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                rows={3}
-                className="input"
-                required
-              />
-              <select
-                value={form.profession}
-                onChange={(e) => setForm({ ...form, profession: e.target.value })}
-                className="select"
-              >
-                <option value="">{t('order.choose_field')}</option>
-                {professions.map((p: any) => (
-                  <option key={p.id} value={p.id}>{p.icon} {p.name_uz}</option>
-                ))}
-              </select>
-              <input
-                placeholder={t('order.address')}
-                value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-                className="input"
-              />
-              <input
-                placeholder={t('order.price')}
-                type="number"
-                value={form.price}
-                onChange={(e) => setForm({ ...form, price: e.target.value })}
-                className="input"
-              />
-              <button type="submit" className="btn btn-primary w-full py-2 font-medium">
-                {t('order.submit')}
-              </button>
-            </form>
-          </div>
-        </div>
+        <CreateOrderModal
+          professions={professions}
+          onClose={() => setShowModal(false)}
+          onCreate={handleCreate}
+        />
       )}
 
       {currentReview && (
-        <div className="modal-overlay">
-          <div className="modal p-6 text-center animate-scale-in">
-            <h2 className="font-display font-extrabold text-lg mb-1">{t('reviews.rate_title')}</h2>
-            <p className="text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>{t('reviews.rate_desc')}</p>
-            <p className="text-sm font-semibold mb-4">{currentReview.title}</p>
-
-            <div className="flex items-center justify-center gap-1.5 mb-4">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => setRating(n)}
-                  className="transition-transform hover:scale-110"
-                >
-                  <Star
-                    size={34}
-                    fill={n <= rating ? 'currentColor' : 'none'}
-                    style={{ color: n <= rating ? 'var(--warning)' : 'var(--text-light)' }}
-                  />
-                </button>
-              ))}
-            </div>
-
-            <textarea
-              placeholder={t('reviews.comment_optional')}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              rows={3}
-              className="input mb-4 text-left"
-            />
-
-            <button
-              onClick={submitReview}
-              disabled={rating === 0 || submitting}
-              className="btn btn-primary w-full py-2.5 font-bold disabled:opacity-50"
-            >
-              {submitting ? t('reviews.submitting') : t('reviews.submit')}
-            </button>
-          </div>
-        </div>
+        <ReviewModal
+          orderTitle={currentReview.title}
+          submitting={submitting}
+          onSubmit={submitReview}
+        />
       )}
     </div>
   )
