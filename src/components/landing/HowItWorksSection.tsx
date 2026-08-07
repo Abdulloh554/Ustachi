@@ -16,7 +16,7 @@ export default function HowItWorksSection() {
     <section className="py-20 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-14">
-          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
+          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--primary)' }}>
             {t('landing.how_title')}
           </p>
           <h2 className="text-3xl font-bold tracking-tight">{t('landing.how_title')}</h2>
@@ -26,7 +26,7 @@ export default function HowItWorksSection() {
           <div className="hidden md:block absolute top-5 left-[12%] right-[12%] h-px bg-[var(--border)]" />
           {howItWorks.map((item) => (
             <div key={item.step} className="text-center relative">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-4 text-white font-display relative z-10 bg-[var(--accent)]">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-4 text-white font-display relative z-10 bg-[var(--primary)]">
                 {item.step}
               </div>
               <h3 className="font-display font-bold text-base mb-1.5">{t(item.titleKey)}</h3>

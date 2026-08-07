@@ -35,7 +35,7 @@ export default function OrderClientInfo({
   return (
     <div className="flex flex-col min-[640px]:flex-row min-[640px]:items-start min-[640px]:justify-between">
       <div className="w-full min-w-0 min-[640px]:w-auto">
-        {title && <h3 className="text-[18px] font-medium leading-snug">{title}</h3>}
+        {title && <h3 className="text-lg font-semibold leading-snug">{title}</h3>}
         <div className="flex items-center gap-2.5 mt-2">
           <span
             className="avatar w-8 h-8 rounded-full text-xs shrink-0 min-[640px]:w-9 min-[640px]:h-9 min-[640px]:text-sm"

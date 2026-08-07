@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-6 animate-fade-in-up">{t('admin.dashboard')}</h1>
+      <h1 className="text-3xl font-bold leading-tight mb-8 animate-fade-in-up">{t('admin.dashboard')}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {cards.map((card, index) => {

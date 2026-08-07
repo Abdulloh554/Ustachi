@@ -81,7 +81,7 @@ export default function CreateOrderModal({ professions, onClose, onCreate }: Cre
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             className="input"
           />
-          <button type="submit" className="btn btn-primary w-full py-2 font-medium" disabled={submitting}>
+          <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
             {t('order.submit')}
           </button>
         </form>

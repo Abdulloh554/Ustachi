@@ -10,7 +10,7 @@ export interface RegisterFormData {
   password: string
   first_name: string
   last_name: string
-  role: 'client' | 'master'
+  role: 'client' | 'master' | 'seller'
   profession_ids: number[]
   bio: string
   experience_years: number
@@ -114,7 +114,7 @@ export default function RegisterDetailsForm({
 
         {error && <p className="error">{error}</p>}
 
-        <button type="submit" className="btn btn-primary w-full py-2.5 font-bold" disabled={submitting}>
+        <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
           {submitting && <Loader2 size={16} className="inline animate-spin mr-2" />}
           {t('auth.register_btn')}
         </button>
@@ -122,7 +122,7 @@ export default function RegisterDetailsForm({
 
       <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
         {t('auth.has_account')}{' '}
-        <Link href="/auth/login" className="font-semibold hover:underline" style={{ color: 'var(--accent)' }}>
+        <Link href="/auth/login" className="font-semibold hover:underline" style={{ color: 'var(--primary)' }}>
           {t('auth.login_link')}
         </Link>
       </p>

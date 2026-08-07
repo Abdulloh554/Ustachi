@@ -39,7 +39,7 @@ export default function AdminMapPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">{t('admin.map_title')}</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('admin.map_title')}</h1>
       {loading ? (
         <SkeletonMap />
       ) : (
@@ -47,7 +47,7 @@ export default function AdminMapPage() {
           <div className="bg-surface rounded-xl p-4 border border-border mb-4">
             <div className="flex gap-6 text-sm">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-accent" />
+                <div className="w-3 h-3 rounded-full" style={{ background: 'var(--primary)' }} />
                 <span>{t('admin.map_orders')} ({data.orders.length})</span>
               </div>
               <div className="flex items-center gap-2">

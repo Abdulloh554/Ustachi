@@ -49,7 +49,7 @@ export default function SidebarNav({
         <span className={`font-medium ${expanded}`}>{t(link.labelKey)}</span>
         {badge && badge > 0 && (
           <span
-            className={`ml-auto text-[10px] font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-white bg-[var(--accent)] ${expanded}`}
+            className={`ml-auto text-[10px] font-bold min-w-[20px] h-5 px-1.5 rounded-full flex items-center justify-center text-white bg-[var(--primary)] ${expanded}`}
           >
             {badge}
           </span>

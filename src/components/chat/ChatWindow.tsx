@@ -108,10 +108,7 @@ export default function ChatWindow({
         >
           <ArrowLeft size={18} />
         </Link>
-        <span
-          className="avatar w-10 h-10 rounded-full text-sm shrink-0"
-          style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}
-        >
+        <span className="avatar w-10 h-10 rounded-full text-sm shrink-0">
           {orderTitle?.[0]?.toUpperCase() || <MessageSquare size={18} />}
         </span>
         <div className="min-w-0">
@@ -155,7 +152,7 @@ export default function ChatWindow({
                 }`}
                 style={
                   isMine(message)
-                    ? { background: 'var(--accent)', color: '#fff' }
+                    ? { background: 'var(--primary)', color: '#fff' }
                     : { background: 'var(--surface)', color: 'var(--text)', boxShadow: '0 1px 2px rgba(0,0,0,0.06)' }
                 }
               >
@@ -195,8 +192,7 @@ export default function ChatWindow({
             }
           }}
           placeholder={t('chat.placeholder')}
-          className="flex-1 min-w-0 px-4 py-2.5 rounded-xl outline-none"
-          style={{ background: 'var(--bg-secondary)', color: 'var(--text)', border: '1px solid var(--border)' }}
+          className="input flex-1 min-w-0"
         />
         <button
           onClick={sendMessage}

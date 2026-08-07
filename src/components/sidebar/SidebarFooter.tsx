@@ -25,14 +25,16 @@ export default function SidebarFooter({
         <div className="flex items-center gap-3">
           <div className="avatar w-10 h-10 rounded-full text-sm shrink-0">{initial}</div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold truncate">{user?.first_name || user?.phone}</p>
-            <p className="text-[11px] truncate" style={{ color: 'var(--text-light)' }}>{user?.phone}</p>
+            <p className="text-sm font-semibold truncate" style={{ color: 'var(--text)' }}>
+              {user?.first_name || user?.phone}
+            </p>
+            <p className="caption text-[11px] truncate">{user?.phone}</p>
           </div>
         </div>
         <div className="flex gap-2 mt-3">
           <button
             onClick={onToggleTheme}
-            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] transition-colors hover:bg-[var(--bg-secondary)]"
+            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] transition-all duration-200 hover:bg-[var(--bg-secondary)] hover:border-[var(--text-light)] hover:shadow-[var(--shadow-sm)]"
             style={{ color: 'var(--text-secondary)' }}
           >
             {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
@@ -40,7 +42,7 @@ export default function SidebarFooter({
           </button>
           <button
             onClick={onLogout}
-            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium py-2 rounded-lg border border-transparent transition-colors hover:bg-[color-mix(in_srgb,var(--danger)_8%,transparent)]"
+            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-lg border border-transparent transition-all duration-200 hover:bg-[color-mix(in_srgb,var(--danger)_8%,transparent)]"
             style={{ color: 'var(--danger)' }}
           >
             <LogOut size={14} />

@@ -7,7 +7,7 @@ import { authAPI } from '@/lib/api'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
 
-export default function MasterSettingsPage() {
+export default function SellerSettingsPage() {
   const { user, setUser, isLoading } = useAuthStore()
   const { theme, toggle } = useThemeStore()
   const { t } = useTranslation()
@@ -59,9 +59,9 @@ export default function MasterSettingsPage() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-semibold mb-4">{t('settings.appearance')}</h2>
+        <h2 className="font-semibold text-sm mb-4">{t('settings.appearance')}</h2>
         <div className="flex items-center justify-between">
-          <span>{t('settings.dark_mode')}</span>
+          <span className="text-sm">{t('settings.dark_mode')}</span>
           <button
             onClick={toggle}
             className={`toggle ${theme === 'dark' ? 'active' : ''}`}
@@ -75,8 +75,8 @@ export default function MasterSettingsPage() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-semibold mb-4">{t('settings.language')}</h2>
-        <div className="flex gap-3">
+        <h2 className="font-semibold text-sm mb-4">{t('settings.language')}</h2>
+        <div className="flex gap-2">
           <button
             onClick={() => changeLanguage('uz')}
             className={`pill text-sm ${user?.language === 'uz' ? 'active' : ''}`}
@@ -90,11 +90,11 @@ export default function MasterSettingsPage() {
             {t('settings.language_ru')}
           </button>
         </div>
-        {langSuccess && <p className="text-sm mt-2" style={{ color: 'var(--success)' }}>{t('settings.language_changed')}</p>}
+        {langSuccess && <p className="text-xs mt-2" style={{ color: 'var(--success)' }}>{t('settings.language_changed')}</p>}
       </div>
 
       <div className="card p-6">
-        <h2 className="font-semibold mb-4">{t('settings.change_password')}</h2>
+        <h2 className="font-semibold text-sm mb-4">{t('settings.change_password')}</h2>
         <form onSubmit={changePassword} className="space-y-3">
           <input
             type="password"
@@ -116,7 +116,7 @@ export default function MasterSettingsPage() {
           <button type="submit" className="btn btn-primary">
             {t('settings.save')}
           </button>
-          {passSuccess && <p className="text-sm" style={{ color: 'var(--success)' }}>{t('settings.password_changed')}</p>}
+          {passSuccess && <p className="text-xs mt-2" style={{ color: 'var(--success)' }}>{t('settings.password_changed')}</p>}
         </form>
       </div>
     </div>

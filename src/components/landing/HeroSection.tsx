@@ -12,13 +12,13 @@ export default function HeroSection() {
       <div className="relative max-w-3xl mx-auto text-center animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-7 border border-[var(--border)]"
           style={{ background: 'var(--surface)', color: 'var(--text-secondary)' }}>
-          <Sparkles size={13} style={{ color: 'var(--accent)' }} />
+          <Sparkles size={13} style={{ color: 'var(--primary)' }} />
           {t('landing.hero_badge')}
         </div>
 
         <h1 className="text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-6">
           {t('landing.hero_title_1')}<br />
-          <span style={{ color: 'var(--accent)' }}>
+          <span style={{ color: 'var(--primary)' }}>
             {t('landing.hero_title_2')}
           </span>
         </h1>

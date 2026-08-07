@@ -6,11 +6,14 @@ import { useAuthStore } from '@/store/authStore'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, Users, ClipboardList, Map, User, Settings,
+  Store, Boxes, BarChart3, ShoppingCart,
 } from 'lucide-react'
 
 const clientLinks = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
   { href: '/client/masters', labelKey: 'sidebar.masters', icon: Users },
+  { href: '/client/store', labelKey: 'sidebar.store', icon: Store },
+  { href: '/client/cart', labelKey: 'sidebar.cart', icon: ShoppingCart },
   { href: '/client/profile', labelKey: 'sidebar.profile', icon: User },
   { href: '/client/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
@@ -20,6 +23,13 @@ const masterLinks = [
   { href: '/master/map', labelKey: 'sidebar.map', icon: Map },
   { href: '/master/profile', labelKey: 'sidebar.profile', icon: User },
   { href: '/master/settings', labelKey: 'sidebar.settings', icon: Settings },
+]
+
+const sellerLinks = [
+  { href: '/seller', labelKey: 'sidebar.store', icon: Store },
+  { href: '/seller/warehouse', labelKey: 'sidebar.warehouse', icon: Boxes },
+  { href: '/seller/statistics', labelKey: 'sidebar.statistics', icon: BarChart3 },
+  { href: '/seller/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
 const adminLinks = [
@@ -37,6 +47,7 @@ export default function MobileBottomNav() {
   const role = user?.role || 'client'
   let links = clientLinks
   if (role === 'master') links = masterLinks
+  if (role === 'seller') links = sellerLinks
   if (role === 'admin') links = adminLinks
 
   return (
@@ -44,7 +55,7 @@ export default function MobileBottomNav() {
       className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-[var(--border)] bg-[var(--surface)]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="grid grid-cols-5">
+      <div className="flex">
         {links.map((link) => {
           const Icon = link.icon
           const isActive = pathname === link.href
@@ -52,13 +63,13 @@ export default function MobileBottomNav() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex flex-col items-center justify-center gap-1 min-h-[56px] py-1.5 transition-colors ${
-                isActive ? 'text-[var(--accent)]' : 'text-[var(--text-light)]'
+              className={`flex flex-1 flex-col items-center justify-center gap-1 min-h-[56px] py-1.5 transition-all duration-200 ${
+                isActive ? 'text-[var(--primary-active)]' : 'text-[var(--text-light)] hover:text-[var(--text-secondary)]'
               }`}
             >
               <span
-                className={`flex items-center justify-center w-12 h-8 rounded-lg transition-colors ${
-                  isActive ? 'bg-[var(--accent-light)]' : ''
+                className={`flex items-center justify-center w-12 h-8 rounded-full transition-all duration-200 ${
+                  isActive ? 'bg-[var(--primary-light)]' : ''
                 }`}
               >
                 <Icon size={20} strokeWidth={isActive ? 2.4 : 2} />

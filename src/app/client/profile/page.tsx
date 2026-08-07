@@ -45,7 +45,10 @@ export default function ClientProfilePage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-xl font-bold mb-6">{t('profile.title')}</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold leading-tight">{t('profile.title')}</h1>
+        <p className="caption mt-1">{t('profile.subtitle')}</p>
+      </div>
 
       <div className="card p-6">
         <div className="flex items-center gap-4 mb-6">
@@ -86,7 +89,7 @@ export default function ClientProfilePage() {
               className="input"
             />
           </div>
-          <button type="submit" className="btn btn-primary px-4 py-1.5 text-sm">
+          <button type="submit" className="btn btn-primary">
             {t('settings.save')}
           </button>
         </form>

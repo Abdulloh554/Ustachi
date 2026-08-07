@@ -17,7 +17,7 @@ export default function FeaturesSection() {
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
+          <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--primary)' }}>
             {t('app.name')}
           </p>
           <h2 className="text-3xl font-bold tracking-tight mb-3">{t('landing.feature_title')}</h2>
@@ -28,7 +28,7 @@ export default function FeaturesSection() {
             const Icon = f.icon
             return (
               <div key={f.titleKey} className="card card-hover p-6 rounded-2xl">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 bg-[var(--accent)]">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 bg-[var(--primary)]">
                   <Icon size={20} className="text-white" />
                 </div>
                 <h3 className="font-display font-bold text-base mb-1.5">{t(f.titleKey)}</h3>

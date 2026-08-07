@@ -46,7 +46,7 @@ export default function MasterDetailPage() {
   if (notFound || !master) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <p className="text-5xl font-extrabold mb-3" style={{ color: 'var(--accent)' }}>404</p>
+        <p className="text-5xl font-extrabold mb-3" style={{ color: 'var(--primary)' }}>404</p>
         <p className="mb-6" style={{ color: 'var(--text-secondary)' }}>{t('order.not_found')}</p>
         <Link href="/client/masters" className="btn btn-primary px-5 py-2.5 text-sm">
           <ArrowLeft size={16} /> {t('client.all_masters')}
@@ -63,7 +63,7 @@ export default function MasterDetailPage() {
         style={{ background: 'rgba(var(--bg-rgb), 0.78)' }}>
         <div className="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center">
+            <span className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
               <Wrench size={16} className="text-white" />
             </span>
             <span className="font-display font-extrabold">{t('app.name')}</span>
@@ -86,7 +86,7 @@ export default function MasterDetailPage() {
               </div>
               <div className="flex items-center gap-3 text-sm mt-1.5 flex-wrap">
                 <span className="flex items-center gap-1 font-bold" style={{ color: 'var(--text)' }}>
-                  <Star size={14} fill="currentColor" style={{ color: 'var(--warning)' }} />
+                  <Star size={14} fill="currentColor" style={{ color: 'var(--primary)' }} />
                   {master.rating.toFixed(1)} ({master.rating_count})
                 </span>
                 <span className="text-xs" style={{ color: master.is_available ? 'var(--success)' : 'var(--danger)' }}>
@@ -135,7 +135,7 @@ export default function MasterDetailPage() {
                         key={n}
                         size={15}
                         fill={n <= work.rating ? 'currentColor' : 'none'}
-                        style={{ color: n <= work.rating ? 'var(--warning)' : 'var(--text-light)' }}
+                        style={{ color: n <= work.rating ? 'var(--primary)' : 'var(--text-light)' }}
                       />
                     ))}
                   </div>

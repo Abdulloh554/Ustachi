@@ -70,12 +70,15 @@ export default function ClientOrdersPage() {
   const currentReview = pending[0]
 
   return (
-    <div>
-      <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-xl font-bold">{t('client.my_orders')}</h1>
+    <div className="max-w-5xl">
+      <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold leading-tight">{t('client.my_orders')}</h1>
+          <p className="caption mt-1">{t('client.orders_subtitle')}</p>
+        </div>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary flex items-center justify-center gap-2 px-3 py-1.5 text-sm min-h-11"
+          className="btn btn-primary min-h-11 shrink-0"
         >
           <Plus size={16} /> {t('client.new_order')}
         </button>
@@ -90,6 +93,7 @@ export default function ClientOrdersPage() {
               <EmptyState
                 icon={<ClipboardList size={24} />}
                 title={t('client.no_orders')}
+                description={t('client.no_orders_desc')}
                 action={
                   <button
                     onClick={() => setShowModal(true)}

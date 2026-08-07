@@ -53,7 +53,10 @@ export default function ClientSettingsPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="text-xl font-bold">{t('settings.title')}</h1>
+      <div>
+        <h1 className="text-3xl font-bold leading-tight">{t('settings.title')}</h1>
+        <p className="caption mt-1">{t('settings.subtitle')}</p>
+      </div>
 
       <div className="card p-6">
         <h2 className="font-semibold text-sm mb-4">{t('settings.appearance')}</h2>
@@ -110,7 +113,7 @@ export default function ClientSettingsPage() {
             required
             minLength={6}
           />
-          <button type="submit" className="btn btn-primary px-4 py-1.5 text-sm">
+          <button type="submit" className="btn btn-primary">
             {t('settings.save')}
           </button>
           {passSuccess && <p className="text-xs mt-2" style={{ color: 'var(--success)' }}>{t('settings.password_changed')}</p>}

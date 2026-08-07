@@ -75,7 +75,7 @@ export default function LoginForm() {
           />
         </div>
         {error && <p className="error">{error}</p>}
-        <button type="submit" className="btn btn-primary w-full py-2.5 font-bold" disabled={submitting}>
+        <button type="submit" className="btn btn-primary w-full" disabled={submitting}>
           {submitting && <Loader2 size={16} className="inline animate-spin mr-2" />}
           {t('auth.login_btn')}
         </button>
@@ -83,7 +83,7 @@ export default function LoginForm() {
 
       <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
         {t('auth.no_account')}{' '}
-        <Link href="/auth/register" className="font-semibold hover:underline" style={{ color: 'var(--accent)' }}>
+        <Link href="/auth/register" className="font-semibold hover:underline" style={{ color: 'var(--primary)' }}>
           {t('auth.register_link')}
         </Link>
       </p>

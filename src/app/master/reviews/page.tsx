@@ -20,9 +20,12 @@ export default function MasterReviewsPage() {
   }, [])
 
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-xl font-bold">{t('sidebar.reviews')}</h1>
+    <div className="max-w-5xl">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold leading-tight">{t('sidebar.reviews')}</h1>
+          <p className="caption mt-1">{t('reviews.subtitle')}</p>
+        </div>
         {reviews.length > 0 && (
           <span className="pill active cursor-default text-sm">{reviews.length}</span>
         )}
@@ -40,7 +43,7 @@ export default function MasterReviewsPage() {
               <div key={review.id} className="card rounded-2xl p-5">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0">
-                    <h3 className="font-display font-bold truncate">{review.order_title}</h3>
+                    <h3 className="font-semibold truncate">{review.order_title}</h3>
                     <p className="text-xs mt-0.5" style={{ color: 'var(--text-light)' }}>
                       {review.client_name || review.client_phone} · {formatDate(review.created_at)}
                     </p>
@@ -51,7 +54,7 @@ export default function MasterReviewsPage() {
                         key={n}
                         size={18}
                         fill={n <= review.rating ? 'currentColor' : 'none'}
-                        style={{ color: n <= review.rating ? 'var(--warning)' : 'var(--text-light)' }}
+                        style={{ color: n <= review.rating ? 'var(--primary)' : 'var(--text-light)' }}
                       />
                     ))}
                   </div>
@@ -63,7 +66,7 @@ export default function MasterReviewsPage() {
 
                 {review.comment ? (
                   <div className="mt-3 flex items-start gap-2 p-3 rounded-xl" style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}>
-                    <MessageSquare size={15} className="shrink-0 mt-0.5" style={{ color: 'var(--accent)' }} />
+                    <MessageSquare size={15} className="shrink-0 mt-0.5" style={{ color: 'var(--primary)' }} />
                     <p className="text-sm leading-relaxed">{review.comment}</p>
                   </div>
                 ) : (

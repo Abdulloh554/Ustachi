@@ -10,8 +10,10 @@ interface OrdersSectionProps {
   loading: boolean
   emptyIcon: LucideIcon
   emptyTitle: string
+  emptyDescription?: string
   acceptPrice?: number
   acceptDisabled?: boolean
+  emptyAction?: React.ReactNode
   onAccept?: (id: number) => void
   onStatusChange?: (id: number, status: string) => void
   onCancel?: (id: number) => void
@@ -22,8 +24,10 @@ export default function OrdersSection({
   loading,
   emptyIcon,
   emptyTitle,
+  emptyDescription,
   acceptPrice,
   acceptDisabled,
+  emptyAction,
   onAccept,
   onStatusChange,
   onCancel,
@@ -37,7 +41,7 @@ export default function OrdersSection({
       ) : (
         <>
           {orders.length === 0 && (
-            <EmptyState icon={<EmptyIcon size={24} />} title={emptyTitle} />
+            <EmptyState icon={<EmptyIcon size={24} />} title={emptyTitle} description={emptyDescription} action={emptyAction} />
           )}
           {orders.map((order: any, index) => (
             <div key={order.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>

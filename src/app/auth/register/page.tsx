@@ -14,6 +14,7 @@ import RegisterDetailsForm, { RegisterFormData } from '@/components/auth/Registe
 const roleRoutes: Record<string, string> = {
   client: '/client',
   master: '/master',
+  seller: '/seller',
   admin: '/admin',
 }
 
@@ -110,7 +111,7 @@ export default function RegisterPage() {
       title={t('auth.register_title')}
       subtitle={t('auth.register_subtitle')}
       brandPoints={brandPoints}
-      maxWidth="max-w-md"
+      maxWidth="max-w-lg"
     >
       {step === 1 && (
         <RegisterRoleStep

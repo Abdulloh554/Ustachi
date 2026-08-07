@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, Users, ClipboardList, Map, User,
   Settings, LogOut, Sun, Moon, Wrench, Star, Menu, X,
+  Store, Boxes, BarChart3, ShoppingCart,
 } from 'lucide-react'
 import SidebarHeader from '@/components/sidebar/SidebarHeader'
 import SidebarNav, { SidebarLink } from '@/components/sidebar/SidebarNav'
@@ -17,6 +18,8 @@ import SidebarFooter from '@/components/sidebar/SidebarFooter'
 const clientLinks: SidebarLink[] = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
   { href: '/client/masters', labelKey: 'sidebar.masters', icon: Users },
+  { href: '/client/store', labelKey: 'sidebar.store', icon: Store },
+  { href: '/client/cart', labelKey: 'sidebar.cart', icon: ShoppingCart },
   { href: '/client/profile', labelKey: 'sidebar.profile', icon: User },
   { href: '/client/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
@@ -27,6 +30,13 @@ const masterLinks: SidebarLink[] = [
   { href: '/master/reviews', labelKey: 'sidebar.reviews', icon: Star },
   { href: '/master/profile', labelKey: 'sidebar.profile', icon: User },
   { href: '/master/settings', labelKey: 'sidebar.settings', icon: Settings },
+]
+
+const sellerLinks: SidebarLink[] = [
+  { href: '/seller', labelKey: 'sidebar.store', icon: Store },
+  { href: '/seller/warehouse', labelKey: 'sidebar.warehouse', icon: Boxes },
+  { href: '/seller/statistics', labelKey: 'sidebar.statistics', icon: BarChart3 },
+  { href: '/seller/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
 const adminLinks: SidebarLink[] = [
@@ -40,6 +50,7 @@ const adminLinks: SidebarLink[] = [
 const linksByRole: Record<string, SidebarLink[]> = {
   client: clientLinks,
   master: masterLinks,
+  seller: sellerLinks,
   admin: adminLinks,
 }
 

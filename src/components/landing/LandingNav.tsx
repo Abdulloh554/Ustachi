@@ -10,14 +10,16 @@ export default function LandingNav() {
   const { t } = useTranslation()
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 border-b border-[var(--border)] backdrop-blur-xl"
-      style={{ background: 'rgba(var(--bg-rgb), 0.78)' }}>
+    <nav className="fixed top-0 inset-x-0 z-50 border-b border-[var(--border)] backdrop-blur-xl shadow-sm"
+      style={{ background: 'rgba(var(--bg-rgb), 0.8)' }}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="w-9 h-9 rounded-xl bg-[var(--accent)] flex items-center justify-center">
-            <Wrench size={18} className="text-white" />
+          <span className="w-9 h-9 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-[var(--shadow-primary)]">
+            <Wrench size={18} className="text-[var(--on-primary)]" />
           </span>
-          <span className="font-display font-extrabold text-lg tracking-tight">{t('app.name')}</span>
+          <span className="font-display font-extrabold text-lg tracking-tight" style={{ color: 'var(--text)' }}>
+            {t('app.name')}
+          </span>
         </Link>
         <div className="flex items-center gap-2">
           {isLoading ? (

@@ -40,7 +40,7 @@ export default function ReviewModal({ orderTitle, submitting, onSubmit }: Review
               <Star
                 size={34}
                 fill={n <= rating ? 'currentColor' : 'none'}
-                style={{ color: n <= rating ? 'var(--warning)' : 'var(--text-light)' }}
+                style={{ color: n <= rating ? 'var(--primary)' : 'var(--text-light)' }}
               />
             </button>
           ))}
@@ -57,7 +57,7 @@ export default function ReviewModal({ orderTitle, submitting, onSubmit }: Review
         <button
           onClick={submit}
           disabled={rating === 0 || submitting}
-          className="btn btn-primary w-full py-2.5 font-bold disabled:opacity-50"
+          className="btn btn-primary w-full disabled:opacity-50"
         >
           {submitting ? t('reviews.submitting') : t('reviews.submit')}
         </button>

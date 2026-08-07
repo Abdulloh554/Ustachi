@@ -31,7 +31,7 @@ export default function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-6">{t('admin.orders')}</h1>
+      <h1 className="text-3xl font-bold leading-tight mb-8">{t('admin.orders')}</h1>
 
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
         <button

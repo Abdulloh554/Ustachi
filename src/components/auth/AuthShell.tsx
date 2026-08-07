@@ -29,7 +29,7 @@ export default function AuthShell({
     <div className="min-h-screen flex">
       <div
         className="hidden lg:flex lg:w-[46%] relative overflow-hidden flex-col justify-between p-12 text-white"
-        style={{ background: 'var(--accent)' }}
+        style={{ background: 'var(--primary)' }}
       >
         <div className="relative flex items-center gap-3">
           <span className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
@@ -66,13 +66,13 @@ export default function AuthShell({
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className={`w-full ${maxWidth} animate-fade-in`}>
           <div className="lg:hidden flex items-center justify-center gap-2.5 mb-8">
-            <span className="w-10 h-10 rounded-xl bg-[var(--accent)] flex items-center justify-center">
+            <span className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center">
               <Wrench size={19} className="text-white" />
             </span>
             <span className="font-display font-bold text-lg">{t('app.name')}</span>
           </div>
 
-          <h1 className="font-display text-2xl font-bold mb-1.5">{title}</h1>
+          <h1 className="font-display text-3xl font-bold mb-1.5">{title}</h1>
           <p className="text-sm mb-8" style={{ color: 'var(--text-secondary)' }}>
             {subtitle}
           </p>

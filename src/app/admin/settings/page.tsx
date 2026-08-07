@@ -22,7 +22,6 @@ const contactFields = [
 ] as const
 
 const businessFields = [
-  ['commission_percent', 'admin.settings.commission_percent', 'number'],
   ['min_order_price', 'admin.settings.min_order_price', 'number'],
   ['max_order_price', 'admin.settings.max_order_price', 'number'],
   ['currency_label', 'admin.settings.currency_label', 'text'],
@@ -85,7 +84,7 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <h1 className="text-xl font-bold">{t('admin.settings.title')}</h1>
+      <h1 className="text-3xl font-bold leading-tight">{t('admin.settings.title')}</h1>
 
       <SettingsSection title={t('admin.settings.site_section')}>
         {fields.map(([name, label, type]) => (
@@ -106,7 +105,7 @@ export default function AdminSettingsPage() {
       </SettingsSection>
 
       <div className="flex items-center gap-3">
-        <button className="btn btn-primary px-6 py-2 text-sm" onClick={save} disabled={saving}>
+        <button className="btn btn-primary" onClick={save} disabled={saving}>
           {saving ? '...' : t('admin.settings.save')}
         </button>
         {saved && <p className="text-sm" style={{ color: 'var(--success)' }}>{t('admin.settings.saved')}</p>}

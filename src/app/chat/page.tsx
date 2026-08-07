@@ -8,11 +8,9 @@ export default function ChatPage() {
   const { t } = useTranslation()
   return (
     <DashboardLayout>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold">{t('sidebar.chat')}</h1>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-          {t('chat.subtitle')}
-        </p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold leading-tight">{t('sidebar.chat')}</h1>
+        <p className="caption mt-1">{t('chat.subtitle')}</p>
       </div>
       <ChatList />
     </DashboardLayout>

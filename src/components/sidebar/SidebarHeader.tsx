@@ -8,21 +8,26 @@ export default function SidebarHeader({ open, role }: { open: boolean; role: str
 
   return (
     <div
-      className={`px-5 pt-5 pb-5 bg-[var(--accent)] text-white ${
+      className={`px-5 pt-6 pb-5 border-b border-[var(--border)] ${
         open ? 'max-lg:block' : 'max-lg:hidden'
       } lg:block`}
     >
       <div className="flex items-center gap-3">
-        <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
-          <Wrench size={19} />
+        <span className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shrink-0 shadow-[var(--shadow-primary)]">
+          <Wrench size={19} className="text-[var(--on-primary)]" />
         </span>
         <div className="min-w-0">
-          <h1 className="font-display font-bold text-base leading-tight text-white">{t('app.name')}</h1>
-          <p className="text-[11px] text-white/80 capitalize">{t(`role.${role}`)}</p>
+          <h1 className="font-display font-extrabold text-base leading-tight" style={{ color: 'var(--text)' }}>
+            {t('app.name')}
+          </h1>
+          <p
+            className="text-[11px] font-semibold uppercase tracking-widest"
+            style={{ color: 'var(--primary-active)' }}
+          >
+            {t(`role.${role}`)}
+          </p>
         </div>
       </div>
-      <div className="mt-5 h-px bg-white/20" />
-      <p className="mt-3 text-[10px] uppercase tracking-widest text-white/70">{t('app.name')}</p>
     </div>
   )
 }

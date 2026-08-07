@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { masterAPI, professionAPI } from '@/lib/api'
 import MasterCard from '@/components/MasterCard'
+import EmptyState from '@/components/ui/EmptyState'
 import { SkeletonCardGrid, SkeletonPills } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
+import { SearchX } from 'lucide-react'
 
 export default function ClientMastersPage() {
   const { t } = useTranslation()
@@ -29,7 +31,10 @@ export default function ClientMastersPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-6">{t('master.title')}</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold leading-tight">{t('master.title')}</h1>
+        <p className="caption mt-1">{t('client.masters_subtitle')}</p>
+      </div>
 
       {loading ? (
         <>
@@ -43,7 +48,7 @@ export default function ClientMastersPage() {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setFilterProfession('')}
-              className={`pill rounded-full text-sm ${!filterProfession ? 'active' : ''}`}
+              className={`pill text-sm ${!filterProfession ? 'active' : ''}`}
             >
               {t('client.all_masters')}
             </button>
@@ -51,21 +56,28 @@ export default function ClientMastersPage() {
               <button
                 key={p.id}
                 onClick={() => setFilterProfession(String(p.id))}
-                className={`pill rounded-full text-sm ${filterProfession === String(p.id) ? 'active' : ''}`}
+                className={`pill text-sm ${filterProfession === String(p.id) ? 'active' : ''}`}
               >
                 {p.icon} {p.name_uz}
               </button>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-            {masters.map((master: any) => (
-              <MasterCard key={master.id} master={master} />
-            ))}
-            {masters.length === 0 && (
-              <p className="col-span-full text-center py-12 text-sm" style={{ color: 'var(--text-light)' }}>{t('client.no_masters')}</p>
-            )}
-          </div>
+          {masters.length === 0 ? (
+            <EmptyState
+              icon={<SearchX size={24} />}
+              title={t('client.no_masters')}
+              description={t('client.no_masters_desc')}
+            />
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+              {masters.map((master: any, index: number) => (
+                <div key={master.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+                  <MasterCard master={master} />
+                </div>
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

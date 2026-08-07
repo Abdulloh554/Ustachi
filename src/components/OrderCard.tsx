@@ -82,7 +82,7 @@ export default function OrderCard({
             <button
               onClick={() => setExpanded((v) => !v)}
               className="mt-1 text-xs font-medium"
-              style={{ color: 'var(--accent)' }}
+              style={{ color: 'var(--primary)' }}
             >
               {expanded ? t('order.show_less') : t('order.show_more')}
             </button>
@@ -115,12 +115,11 @@ export default function OrderCard({
       </div>
 
       {(order.conversation_id || canCancel) && (
-        <div className="mt-3 flex gap-2">
+        <div className="mt-4 flex gap-2">
           {order.conversation_id && (
             <Link
               href={`/chat/${order.conversation_id}`}
-              className="btn flex-1 py-2.5 font-semibold justify-center gap-2"
-              style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}
+              className="btn btn-secondary flex-1 py-2.5 justify-center gap-2"
             >
               <MessageSquare size={16} /> {t('order.chat')}
             </Link>
@@ -128,7 +127,7 @@ export default function OrderCard({
           {canCancel && (
             <button
               onClick={handleCancelClick}
-              className="btn btn-danger flex-1 py-2.5 font-semibold justify-center gap-2"
+              className="btn btn-ghost-danger flex-1 py-2.5 justify-center gap-2"
             >
               <XCircle size={16} /> {t('order.cancel')}
             </button>

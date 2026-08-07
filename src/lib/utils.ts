@@ -9,6 +9,12 @@ export function formatDate(dateStr: string): string {
   })
 }
 
+export function formatMoney(value: string | number): string {
+  const num = Number(value)
+  if (isNaN(num)) return '0'
+  return num.toLocaleString('ru-RU')
+}
+
 import i18n from 'i18next'
 
 export function getStatusLabel(status: string): string {

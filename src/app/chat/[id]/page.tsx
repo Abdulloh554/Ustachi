@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import DashboardLayout from '@/components/DashboardLayout'
 import ChatWindow from '@/components/chat/ChatWindow'
 import { chatAPI } from '@/lib/api'
-import { Loader2 } from 'lucide-react'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 export default function ConversationPage() {
   const params = useParams<{ id: string }>()
@@ -46,8 +46,12 @@ export default function ConversationPage() {
     <DashboardLayout>
       <div className="max-w-3xl mx-auto">
         {loading ? (
-          <div className="flex justify-center py-16 text-[var(--text-light)]">
-            <Loader2 size={24} className="animate-spin" />
+          <div className="space-y-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className={`flex ${i % 2 === 0 ? 'justify-end' : 'justify-start'}`}>
+                <Skeleton className={`h-10 rounded-2xl ${i % 2 === 0 ? 'w-2/5' : 'w-1/3'}`} />
+              </div>
+            ))}
           </div>
         ) : error ? (
           <p className="text-sm" style={{ color: 'var(--danger)' }}>

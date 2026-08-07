@@ -112,3 +112,21 @@ export const settingsAPI = {
   get: () => api.get('/settings/'),
   update: (data: any) => api.put('/settings/', data),
 }
+
+export const storeAPI = {
+  products: (params?: any) => api.get('/stores/products/', { params }),
+  product: (id: number) => api.get(`/stores/products/${id}/`),
+  favorites: () => api.get('/stores/favorites/'),
+  toggleFavorite: (productId: number) => api.post('/stores/favorites/toggle/', { product_id: productId }),
+  cart: () => api.get('/stores/cart/'),
+  addToCart: (productId: number, quantity = 1) => api.post('/stores/cart/', { product_id: productId, quantity }),
+  removeFromCart: (id: number) => api.delete(`/stores/cart/${id}/`),
+  checkout: () => api.post('/stores/cart/checkout/'),
+  myStore: () => api.get('/stores/me/store/'),
+  updateStore: (data: any) => api.put('/stores/me/store/', data),
+  myProducts: () => api.get('/stores/me/products/'),
+  createProduct: (data: any) => api.post('/stores/me/products/', data),
+  updateProduct: (id: number, data: any) => api.patch(`/stores/me/products/${id}/`, data),
+  deleteProduct: (id: number) => api.delete(`/stores/me/products/${id}/`),
+  statistics: () => api.get('/stores/me/statistics/'),
+}

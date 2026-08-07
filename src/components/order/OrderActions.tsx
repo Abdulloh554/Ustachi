@@ -22,7 +22,7 @@ export default function OrderActions({
       <button
         onClick={onAccept}
         disabled={acceptDisabled}
-        className="btn btn-primary mt-4 w-full py-2.5 font-bold"
+        className="btn btn-primary mt-4 w-full"
       >
         {t('order.accept')}
         {acceptPrice != null && (
@@ -36,21 +36,21 @@ export default function OrderActions({
     return (
       <div className="mt-4 flex gap-2">
         {status === 'accepted' && (
-          <button onClick={() => onStatusChange('coming')} className="btn btn-primary flex-1 py-2.5 font-bold">
+          <button onClick={() => onStatusChange('coming')} className="btn btn-primary flex-1">
             {t('order.coming')}
           </button>
         )}
         {status === 'coming' && (
-          <button onClick={() => onStatusChange('in_progress')} className="btn btn-primary flex-1 py-2.5 font-bold">
+          <button onClick={() => onStatusChange('in_progress')} className="btn btn-primary flex-1">
             {t('order.in_progress')}
           </button>
         )}
         {status === 'in_progress' && (
           <>
-            <button onClick={() => onStatusChange('completed')} className="btn btn-primary flex-1 py-2.5 font-bold">
+            <button onClick={() => onStatusChange('completed')} className="btn btn-primary flex-1">
               {t('order.completed')}
             </button>
-            <button onClick={() => onStatusChange('failed')} className="btn btn-danger flex-1 py-2.5 font-bold">
+            <button onClick={() => onStatusChange('failed')} className="btn btn-danger flex-1">
               {t('order.failed')}
             </button>
           </>

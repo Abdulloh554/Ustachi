@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { masterAPI, professionAPI } from '@/lib/api'
 import { useTranslation } from 'react-i18next'
+import { CheckCircle2 } from 'lucide-react'
 import ProfileHeader from '@/components/master/ProfileHeader'
 import ProfessionsPicker from '@/components/master/ProfessionsPicker'
 import MasterProfileSkeleton from '@/components/master/MasterProfileSkeleton'
@@ -17,6 +18,9 @@ export default function MasterProfilePage() {
     profession_ids: [] as number[],
     is_available: true,
   })
+  const [error, setError] = useState('')
+  const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     loadProfile()
@@ -35,6 +39,7 @@ export default function MasterProfilePage() {
   }
 
   const toggleProfession = (id: number) => {
+    setError('')
     setForm((prev) => ({
       ...prev,
       profession_ids: prev.profession_ids.includes(id)
@@ -45,8 +50,21 @@ export default function MasterProfilePage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await masterAPI.updateProfile(form)
-    setProfile(res.data)
+    setError('')
+    setSaved(false)
+    if (form.profession_ids.length === 0) {
+      setError(t('master.requires_profession'))
+      return
+    }
+    setSaving(true)
+    try {
+      const res = await masterAPI.updateProfile(form)
+      setProfile(res.data)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2500)
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!profile) {
@@ -54,61 +72,88 @@ export default function MasterProfilePage() {
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <h1 className="text-xl font-bold">{t('master.profile')}</h1>
-
-      <div className="card p-6">
-        <ProfileHeader profile={profile} />
-
-        <form onSubmit={handleSave} className="space-y-4">
-          <ProfessionsPicker
-            professions={professions}
-            selected={form.profession_ids}
-            onToggle={toggleProfession}
-          />
-
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('master.about_me')}</label>
-            <textarea
-              value={form.bio}
-              onChange={(e) => setForm({ ...form, bio: e.target.value })}
-              rows={4}
-              className="input w-full px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('master.experience')}</label>
-            <input
-              type="number"
-              value={form.experience_years}
-              onChange={(e) => setForm({ ...form, experience_years: parseInt(e.target.value) || 0 })}
-              className="input w-full px-3 py-2"
-            />
-          </div>
-
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium">{t('order.status_label')}</label>
-            <button
-              type="button"
-              onClick={() => setForm({ ...form, is_available: !form.is_available })}
-              className={`toggle ${form.is_available ? 'active' : ''}`}
-              aria-pressed={form.is_available}
-              aria-label={t('order.status_label')}
-            >
-              <span className="toggle-track" />
-              <span className="toggle-knob" />
-            </button>
-            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-              {form.is_available ? t('order.accept_btn') : t('order.busy')}
-            </span>
-          </div>
-
-          <button type="submit" className="btn btn-primary px-6 py-2 text-sm font-medium">
-            {t('master.save')}
-          </button>
-        </form>
+    <div className="max-w-5xl">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold leading-tight">{t('master.profile_edit')}</h1>
+        <p className="caption mt-1">{t('master.profile_subtitle')}</p>
       </div>
+
+      <div className="card p-6 sm:p-8">
+        <ProfileHeader profile={profile} />
+      </div>
+
+      <form onSubmit={handleSave} noValidate>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 items-start">
+          <div className="lg:col-span-2 space-y-6">
+            <section className="card p-6">
+              <h3 className="text-lg font-semibold leading-tight">{t('master.your_professions')}</h3>
+              <p className="caption mt-0.5 mb-4">{t('master.professions_hint')}</p>
+              <ProfessionsPicker
+                professions={professions}
+                selected={form.profession_ids}
+                onToggle={toggleProfession}
+              />
+              {error && <p className="mt-3 text-sm" style={{ color: 'var(--danger)' }}>{error}</p>}
+            </section>
+
+            <section className="card p-6">
+              <h3 className="text-lg font-semibold leading-tight">{t('master.about_me')}</h3>
+              <p className="caption mt-0.5 mb-4">{t('master.about_hint')}</p>
+              <label className="block text-sm font-medium mb-1.5">{t('auth.about_self')}</label>
+              <textarea
+                value={form.bio}
+                onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                rows={4}
+                className="input"
+              />
+              <div className="mt-5">
+                <label className="block text-sm font-medium mb-1.5">{t('master.experience')}</label>
+                <div className="relative max-w-[200px]">
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.experience_years}
+                    onChange={(e) => setForm({ ...form, experience_years: Math.max(0, parseInt(e.target.value) || 0) })}
+                    className="input pr-12"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 caption">{t('master.experience_label')}</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside className="space-y-6">
+            <section className="card p-6">
+              <h3 className="text-lg font-semibold leading-tight">{t('order.status_label')}</h3>
+              <p className="caption mt-0.5 mb-4">{t('master.availability_desc')}</p>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium">{form.is_available ? t('status.available') : t('status.busy')}</span>
+                <button
+                  type="button"
+                  onClick={() => setForm((p) => ({ ...p, is_available: !p.is_available }))}
+                  className={`toggle ${form.is_available ? 'active' : ''}`}
+                  aria-pressed={form.is_available}
+                >
+                  <span className="toggle-track" />
+                  <span className="toggle-knob" />
+                </button>
+              </div>
+            </section>
+
+            <section className="card p-6">
+              <button type="submit" disabled={saving} className="btn btn-primary w-full">
+                {saving ? t('common.loading') : t('master.save')}
+              </button>
+              {saved && (
+                <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium" style={{ color: 'var(--success)' }}>
+                  <CheckCircle2 size={15} /> {t('master.saved')}
+                </p>
+              )}
+              <p className="caption text-center mt-3">{t('master.save_note')}</p>
+            </section>
+          </aside>
+        </div>
+      </form>
     </div>
   )
 }

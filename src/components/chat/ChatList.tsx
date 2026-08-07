@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import { useAuthStore } from '@/store/authStore'
 import { chatAPI } from '@/lib/api'
-import { MessageSquare, Loader2, Inbox } from 'lucide-react'
+import { MessageSquare, Inbox } from 'lucide-react'
+import EmptyState from '@/components/ui/EmptyState'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 interface ConversationData {
   id: number
@@ -47,20 +49,29 @@ export default function ChatList() {
   return (
     <div className="space-y-3">
       {error && (
-        <p className="text-sm" style={{ color: 'var(--danger)' }}>
+        <div className="px-4 py-3 rounded-xl text-sm font-medium"
+          style={{ background: 'color-mix(in srgb, var(--danger) 12%, transparent)', color: 'var(--danger)' }}>
           {error}
-        </p>
+        </div>
       )}
 
       {loading ? (
-        <div className="flex justify-center py-12 text-[var(--text-light)]">
-          <Loader2 size={24} className="animate-spin" />
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card p-4 flex items-center gap-3">
+              <Skeleton className="w-11 h-11 rounded-full shrink-0" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-1/3 rounded-lg" />
+                <Skeleton className="h-3 w-2/3 rounded-lg" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 py-16 text-[var(--text-light)]">
-          <Inbox size={36} />
-          <p className="text-sm">{t('chat.no_conversations')}</p>
-        </div>
+        <EmptyState
+          icon={<Inbox size={24} />}
+          title={t('chat.no_conversations')}
+        />
       ) : (
         items.map((item) => (
           <Link
@@ -68,10 +79,7 @@ export default function ChatList() {
             href={`/chat/${item.id}`}
             className="card card-hover p-4 flex items-center gap-3"
           >
-            <span
-              className="avatar w-11 h-11 rounded-full text-sm shrink-0 flex items-center justify-center"
-              style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}
-            >
+            <span className="avatar w-11 h-11 rounded-full text-sm shrink-0">
               {item.other_user_name?.[0]?.toUpperCase() || <MessageSquare size={18} />}
             </span>
             <div className="min-w-0 flex-1">
@@ -99,7 +107,7 @@ export default function ChatList() {
             {item.unread_count ? (
               <span
                 className="px-2 py-0.5 rounded-full text-[11px] font-bold shrink-0"
-                style={{ background: 'var(--accent)', color: '#fff' }}
+                style={{ background: 'var(--primary)', color: '#fff' }}
               >
                 {item.unread_count}
               </span>

@@ -19,7 +19,7 @@ export default function AdminMastersPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-6">{t('admin.all_masters')}</h1>
+      <h1 className="text-3xl font-bold leading-tight mb-8">{t('admin.all_masters')}</h1>
       <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table>
@@ -57,7 +57,7 @@ export default function AdminMastersPage() {
                   <td>{m.experience_years} {t('master.experience_label')}</td>
                   <td>
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
-                      style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
+                      style={{ background: 'var(--primary-light)', color: 'var(--primary-active)' }}>
                       {Number(m.balance || 0).toLocaleString('ru-RU')} {t('order.price_label')}
                     </span>
                   </td>
