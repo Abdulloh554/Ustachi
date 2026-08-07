@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { storeAPI } from '@/lib/api'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useTranslation } from 'react-i18next'
-import { Package, Plus, Pencil, Trash2, Loader2 } from 'lucide-react'
+import { Package, Plus, Minus, Pencil, Trash2 } from 'lucide-react'
 import { formatMoney } from '@/lib/utils'
 import ProductFormModal, { ProductFormData, emptyProductForm } from '@/components/seller/ProductFormModal'
 
@@ -26,6 +26,7 @@ export default function SellerWarehousePage() {
   const [editing, setEditing] = useState<Product | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [busyId, setBusyId] = useState<number | null>(null)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -38,6 +39,21 @@ export default function SellerWarehousePage() {
   useEffect(() => {
     load()
   }, [load])
+
+  const changeQuantity = async (id: number, delta: number) => {
+    const product = products.find((p) => p.id === id)
+    if (!product) return
+    const next = Math.max(0, product.quantity + delta)
+    setBusyId(id)
+    try {
+      await storeAPI.updateProduct(id, { quantity: next })
+      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, quantity: next } : p)))
+    } catch {
+      load()
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   const openAdd = () => {
     setEditing(null)
@@ -167,9 +183,27 @@ export default function SellerWarehousePage() {
                     {t('seller.product_cost')}: {formatMoney(p.cost_price)} so'm
                   </p>
                 </div>
-                <span className="pill text-xs" style={{ color: 'var(--primary-active)' }}>
-                  {t('seller.in_stock')}: {p.quantity} {t('seller.units')}
-                </span>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => changeQuantity(p.id, -1)}
+                    disabled={busyId === p.id || p.quantity === 0}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center border border-[var(--border)] hover:bg-[var(--bg-secondary)] disabled:opacity-40 disabled:pointer-events-none"
+                    aria-label="Decrease"
+                  >
+                    <Minus size={14} style={{ color: 'var(--text)' }} />
+                  </button>
+                  <span className="min-w-[72px] text-center text-sm font-bold" style={{ color: 'var(--primary-active)' }}>
+                    {p.quantity} {t('seller.units')}
+                  </span>
+                  <button
+                    onClick={() => changeQuantity(p.id, 1)}
+                    disabled={busyId === p.id}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] hover:bg-[var(--primary-hover)] disabled:opacity-40 disabled:pointer-events-none"
+                    aria-label="Increase"
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

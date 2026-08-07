@@ -33,7 +33,6 @@ const masterLinks: SidebarLink[] = [
 ]
 
 const sellerLinks: SidebarLink[] = [
-  { href: '/seller', labelKey: 'sidebar.store', icon: Store },
   { href: '/seller/warehouse', labelKey: 'sidebar.warehouse', icon: Boxes },
   { href: '/seller/statistics', labelKey: 'sidebar.statistics', icon: BarChart3 },
   { href: '/seller/settings', labelKey: 'sidebar.settings', icon: Settings },
