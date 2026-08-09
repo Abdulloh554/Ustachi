@@ -269,6 +269,11 @@
   "sidebar.saved": "Избранное",
   "sidebar.cart": "Корзина",
 
+  "panel.admin": "Панель админа",
+  "panel.client": "Панель клиента",
+  "panel.master": "Панель мастера",
+  "panel.seller": "Панель продавца",
+
   "seller.store_title": "Мой магазин",
   "seller.store_subtitle": "Информация о вашем магазине",
   "seller.store_name": "Название магазина",

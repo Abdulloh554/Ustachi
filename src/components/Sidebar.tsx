@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
 import { reviewAPI } from '@/lib/api'
+import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, Users, ClipboardList, Map, User,
@@ -62,14 +63,16 @@ export default function Sidebar() {
   const [reviewCount, setReviewCount] = useState(0)
 
   const role = user?.role || 'client'
-  const links = linksByRole[role] || clientLinks
+  const activePanel = getActivePanel(pathname)
+  const panel = activePanel || role
+  const links = linksByRole[panel] || linksByRole[role] || clientLinks
 
   useEffect(() => {
     setOpen(false)
   }, [pathname])
 
   useEffect(() => {
-    if (role === 'master') {
+    if (panel === 'master') {
       reviewAPI.myReviews()
         .then((res) => {
           const list = res.data.results || res.data
@@ -77,10 +80,10 @@ export default function Sidebar() {
         })
         .catch(() => {})
     }
-  }, [role])
+  }, [panel])
 
   const badges: Record<string, number> = {}
-  if (role === 'master') {
+  if (panel === 'master') {
     badges['/master/reviews'] = reviewCount
   }
 
@@ -106,7 +109,7 @@ export default function Sidebar() {
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        <SidebarHeader open={open} role={role} />
+        <SidebarHeader open={open} role={panel} />
 
         <SidebarNav links={links} open={open} badges={badges} />
 

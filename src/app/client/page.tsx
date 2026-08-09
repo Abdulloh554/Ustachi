@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { orderAPI, professionAPI, reviewAPI } from '@/lib/api'
+import { useAuthStore } from '@/store/authStore'
 import OrderCard from '@/components/OrderCard'
 import EmptyState from '@/components/ui/EmptyState'
 import { SkeletonCardList } from '@/components/ui/Skeleton'
@@ -12,6 +13,7 @@ import { Plus, ClipboardList } from 'lucide-react'
 
 export default function ClientOrdersPage() {
   const { t } = useTranslation()
+  const { user } = useAuthStore()
   const [orders, setOrders] = useState<any[]>([])
   const [professions, setProfessions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -28,7 +30,11 @@ export default function ClientOrdersPage() {
     const res = await orderAPI.list()
     const all = res.data.results || res.data
     setOrders(all)
-    setPending(all.filter((o: any) => o.status === 'completed' && !o.my_review))
+    const myId = String(user?.id)
+    setPending(all.filter((o: any) =>
+      o.status === 'completed' && !o.my_review &&
+      String(o.client?.id || o.client) === myId
+    ))
     setLoading(false)
   }
 
@@ -51,6 +57,10 @@ export default function ClientOrdersPage() {
         o.id === current.id ? { ...o, my_review: { rating, comment } } : o
       ))
       setPending((prev) => prev.slice(1))
+    } catch (err: any) {
+      const data = err.response?.data
+      const message = typeof data === 'string' ? data : data?.error || t('auth.error_occurred')
+      window.alert(message)
     } finally {
       setSubmitting(false)
     }

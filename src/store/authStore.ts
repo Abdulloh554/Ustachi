@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import api from '@/lib/api'
+import api, { setAccessToken } from '@/lib/api'
 
 interface User {
   id: number
@@ -44,8 +44,7 @@ function clearCache() {
 
 async function doLogin(phone: string, password: string): Promise<User> {
   const res = await api.post('/auth/login/', { phone, password })
-  localStorage.setItem('access_token', res.data.access)
-  localStorage.setItem('refresh_token', res.data.refresh)
+  setAccessToken(res.data?.access || null)
   const profileRes = await api.get('/auth/profile/')
   saveCache(profileRes.data)
   return profileRes.data
@@ -74,27 +73,22 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
+    try {
+      api.post('/auth/logout/')
+    } catch {}
+    setAccessToken(null)
     clearCache()
     set({ user: null })
   },
 
   loadProfile: async () => {
     try {
-      const token = localStorage.getItem('access_token')
-      if (!token) {
-        set({ user: null, isLoading: false })
-        return
-      }
       const res = await api.get('/auth/profile/')
       saveCache(res.data)
       set({ user: res.data, isLoading: false })
     } catch (err: any) {
       if (err.response?.status === 401) {
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('refresh_token')
-        clearCache()
+        setAccessToken(null)
         set({ user: null, isLoading: false })
       } else {
         set({ user: readCache(), isLoading: false })

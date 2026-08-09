@@ -69,8 +69,8 @@ export default function AdminOrdersPage() {
               {orders.map((o: any) => (
                 <tr key={o.id}>
                   <td className="font-medium">{o.title}</td>
-                  <td>{o.client_details?.phone || o.client}</td>
-                  <td>{o.master_details?.phone || o.master || '-'}</td>
+                  <td>{o.client_details?.phone || o.client?.phone || o.client || '-'}</td>
+                  <td>{o.master_details?.phone || o.master?.phone || o.master || '-'}</td>
                   <td><StatusBadge status={o.status} /></td>
                   <td>{o.price ? `${o.price} ${t('order.price_label')}` : '-'}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>{formatDate(o.created_at)}</td>

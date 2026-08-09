@@ -50,34 +50,41 @@ export default function ChatWindow({
         if (!cancelled) setLoading(false)
       })
 
-    const socket = new WebSocket(chatWebSocketUrl(conversationId))
-    wsRef.current = socket
+    let socket: WebSocket | null = null
 
-    socket.onopen = () => {
-      if (!cancelled) setConnected(true)
-    }
-    socket.onclose = () => {
-      if (!cancelled) setConnected(false)
-    }
-    socket.onerror = () => {
-      if (!cancelled) setConnected(false)
-    }
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data)
-        if (data.type === 'message') {
-          setMessages((prev) => {
-            if (prev.some((m) => m.id === data.message.id)) return prev
-            return [...prev, data.message]
-          })
-        }
-      } catch {}
-    }
+    chatWebSocketUrl(conversationId).then((url) => {
+      if (cancelled) return
+      socket = new WebSocket(url)
+      wsRef.current = socket
+
+      socket.onopen = () => {
+        if (!cancelled) setConnected(true)
+      }
+      socket.onclose = () => {
+        if (!cancelled) setConnected(false)
+      }
+      socket.onerror = () => {
+        if (!cancelled) setConnected(false)
+      }
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          if (data.type === 'message') {
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === data.message.id)) return prev
+              return [...prev, data.message]
+            })
+          }
+        } catch {}
+      }
+    })
 
     return () => {
       cancelled = true
-      socket.close()
-      wsRef.current = null
+      if (socket) {
+        socket.close()
+        wsRef.current = null
+      }
     }
   }, [conversationId, t])
 

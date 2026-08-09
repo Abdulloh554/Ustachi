@@ -2,19 +2,49 @@ import axios from 'axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ustachibackend.onrender.com/api'
 
+let inMemoryToken: string | null = null
+let refreshPromise: Promise<string | null> | null = null
+
+export function setAccessToken(token: string | null) {
+  inMemoryToken = token
+}
+
+export function getAccessToken(): string | null {
+  return inMemoryToken
+}
+
+export async function ensureAccessToken(): Promise<string | null> {
+  if (inMemoryToken) return inMemoryToken
+  if (typeof window === 'undefined') return null
+  if (refreshPromise) return refreshPromise
+
+  refreshPromise = axios
+    .post(`${API_URL}/auth/refresh/`, {}, { withCredentials: true })
+    .then((res) => {
+      inMemoryToken = res.data?.access || null
+      return inMemoryToken
+    })
+    .catch(() => {
+      inMemoryToken = null
+      return null
+    })
+    .finally(() => {
+      refreshPromise = null
+    })
+  return refreshPromise
+}
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 })
 
 api.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('access_token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+  if (typeof window !== 'undefined' && inMemoryToken) {
+    config.headers.Authorization = `Bearer ${inMemoryToken}`
   }
   return config
 })
@@ -22,22 +52,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
-      const refresh = localStorage.getItem('refresh_token')
-      if (refresh) {
-        try {
-          const res = await axios.post(`${API_URL}/auth/refresh/`, { refresh })
-          localStorage.setItem('access_token', res.data.access)
-          error.config.headers.Authorization = `Bearer ${res.data.access}`
-          return axios(error.config)
-        } catch (refreshErr: any) {
-          if (refreshErr.response) {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('refresh_token')
-            localStorage.removeItem('user_cache')
-            window.location.href = '/auth/login'
-          }
-        }
+    if (error.response?.status === 401 && typeof window !== 'undefined' && !error.config?._retried) {
+      const config = { ...error.config, _retried: true }
+      const token = await ensureAccessToken()
+      if (token) {
+        config.headers = { ...config.headers, Authorization: `Bearer ${token}` }
+        return api(config)
       }
     }
     return Promise.reject(error)
@@ -49,6 +69,8 @@ export default api
 export const authAPI = {
   register: (data: any) => api.post('/auth/register/', data),
   login: (data: any) => api.post('/auth/login/', data),
+  refresh: () => api.post('/auth/refresh/'),
+  logout: () => api.post('/auth/logout/'),
   profile: () => api.get('/auth/profile/'),
   updateProfile: (data: any) => api.patch('/auth/profile/', data),
   changePassword: (data: any) => api.post('/auth/change-password/', data),
@@ -70,11 +92,11 @@ export const chatAPI = {
   send: (id: number, text: string) => api.post(`/chat/conversations/${id}/messages/`, { text }),
 }
 
-export function chatWebSocketUrl(conversationId: number): string {
+export async function chatWebSocketUrl(conversationId: number): Promise<string> {
   const base = API_URL
   const protocol = base.startsWith('https') ? 'wss' : 'ws'
   const host = base.replace(/^https?:\/\//, '').replace(/\/api\/?$/, '')
-  const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') || '' : ''
+  const token = (await ensureAccessToken()) || ''
   return `${protocol}://${host}/ws/chat/${conversationId}/?token=${encodeURIComponent(token)}`
 }
 

@@ -44,7 +44,7 @@ export default function MasterOrdersPage() {
   const loadMyOrders = async () => {
     const res = await orderAPI.list()
     const all = res.data.results || res.data
-    setMyOrders(all.filter((o: any) => o.master === user?.id))
+    setMyOrders(all.filter((o: any) => String(o.master?.id || o.master) === String(user?.id)))
   }
 
   const handleRefresh = async () => {

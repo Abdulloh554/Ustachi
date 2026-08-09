@@ -269,6 +269,11 @@
   "sidebar.saved": "Saqlanganlar",
   "sidebar.cart": "Savat",
 
+  "panel.admin": "Admin panel",
+  "panel.client": "Mijoz panel",
+  "panel.master": "Usta panel",
+  "panel.seller": "Sotuvchi panel",
+
   "seller.store_title": "Do'konim",
   "seller.store_subtitle": "Do'koningiz haqida ma'lumot",
   "seller.store_name": "Do'kon nomi",

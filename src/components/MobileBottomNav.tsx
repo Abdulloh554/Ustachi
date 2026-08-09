@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
+import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, Users, ClipboardList, Map, User, Settings,
@@ -44,10 +45,12 @@ export default function MobileBottomNav() {
   const { t } = useTranslation()
 
   const role = user?.role || 'client'
+  const activePanel = getActivePanel(pathname)
+  const panel = activePanel || role
   let links = clientLinks
-  if (role === 'master') links = masterLinks
-  if (role === 'seller') links = sellerLinks
-  if (role === 'admin') links = adminLinks
+  if (panel === 'master') links = masterLinks
+  if (panel === 'seller') links = sellerLinks
+  if (panel === 'admin') links = adminLinks
 
   return (
     <nav
