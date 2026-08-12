@@ -6,6 +6,9 @@ import { useRouter, usePathname } from 'next/navigation'
 
 const publicPaths = ['/', '/auth/login', '/auth/register', '/masters']
 
+const isPublicPath = (path: string) =>
+  publicPaths.includes(path) || path.startsWith('/masters/')
+
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const { loadProfile, user, isLoading } = useAuthStore()
   const router = useRouter()
@@ -18,7 +21,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     if (isLoading) return
     if (user) return
-    if (!publicPaths.includes(pathname)) {
+    if (!isPublicPath(pathname)) {
       router.push('/auth/login')
     }
   }, [user, isLoading, pathname, router])

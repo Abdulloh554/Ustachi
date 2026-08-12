@@ -8,8 +8,8 @@ export default function ProfessionsPicker({
   onToggle,
 }: {
   professions: any[]
-  selected: number[]
-  onToggle: (id: number) => void
+  selected: string[]
+  onToggle: (id: string) => void
 }) {
   const { t } = useTranslation()
 

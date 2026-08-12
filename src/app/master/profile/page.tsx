@@ -15,7 +15,7 @@ export default function MasterProfilePage() {
   const [form, setForm] = useState({
     bio: '',
     experience_years: 0,
-    profession_ids: [] as number[],
+    profession_ids: [] as string[],
     is_available: true,
   })
   const [error, setError] = useState('')
@@ -24,21 +24,24 @@ export default function MasterProfilePage() {
 
   useEffect(() => {
     loadProfile()
-    professionAPI.list().then((res) => setProfessions(res.data.results || res.data))
+    professionAPI.list().then((res) => setProfessions(res.data.results || res.data)).catch(() => setProfessions([]))
   }, [])
 
   const loadProfile = async () => {
-    const res = await masterAPI.myProfile()
-    setProfile(res.data)
-    setForm({
-      bio: res.data.bio || '',
-      experience_years: res.data.experience_years || 0,
-      profession_ids: res.data.professions?.map((p: any) => p.id) || [],
-      is_available: res.data.is_available,
-    })
+    try {
+      const res = await masterAPI.myProfile()
+      setProfile(res.data)
+      setForm({
+        bio: res.data.bio || '',
+        experience_years: res.data.experience_years || 0,
+        profession_ids: res.data.professions?.map((p: any) => p.id) || [],
+        is_available: res.data.is_available,
+      })
+    } catch {
+    }
   }
 
-  const toggleProfession = (id: number) => {
+  const toggleProfession = (id: string) => {
     setError('')
     setForm((prev) => ({
       ...prev,
@@ -62,6 +65,8 @@ export default function MasterProfilePage() {
       setProfile(res.data)
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
+    } catch {
+      setError(t('auth.error_occurred'))
     } finally {
       setSaving(false)
     }

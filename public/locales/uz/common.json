@@ -68,6 +68,13 @@
   "chat.send": "Yuborish",
   "chat.load_error": "Chat yuklanmadi. Qayta urinib ko'ring.",
   "chat.not_connected": "Serverga ulanmadi. Qayta ulanishni kuting.",
+  "chat.reply": "Javob",
+  "chat.edit": "Tahrirlash",
+  "chat.delete": "O'chirish",
+  "chat.edited": "(tahrirlangan)",
+  "chat.replying_to": "Javob:",
+  "chat.editing_message": "Xabarni tahrirlash",
+  "chat.delete_confirm": "Bu xabarni o'chirmoqchimisiz?",
 
   "reviews.rate_title": "Buyurtmani baholang",
   "reviews.rate_desc": "Usta ishini 5 yulduzgacha baholang",
@@ -259,6 +266,7 @@
   "common.masters": "Ustalar",
   "common.search": "Izlash",
   "common.loading": "Yuklanmoqda...",
+  "common.close": "Yopish",
 
   "role.seller": "Sotuvchi",
   "role.seller_desc": "Mahsulot sotaman",

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import api, { setAccessToken } from '@/lib/api'
 
 interface User {
-  id: number
+  id: string
   phone: string
   username: string
   role: string
@@ -73,9 +73,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    try {
-      api.post('/auth/logout/')
-    } catch {}
+    api.post('/auth/logout/').catch(() => {})
     setAccessToken(null)
     clearCache()
     set({ user: null })

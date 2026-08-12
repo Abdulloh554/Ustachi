@@ -5,7 +5,7 @@ import { MapPin, Navigation, X } from 'lucide-react'
 import { Skeleton } from '@/components/ui/Skeleton'
 
 interface RouteOrder {
-  id: number
+  id: string
   title: string
   status: string
   address?: string

@@ -14,10 +14,12 @@ export default function ClientMapPage() {
   const [masters, setMasters] = useState<any[]>([])
 
   useEffect(() => {
-    masterAPI.list({ ordering: '-rating' }).then((res) => {
-      setMasters(res.data.results || res.data)
-      setLoading(false)
-    })
+    masterAPI.list({ ordering: '-rating' })
+      .then((res) => {
+        setMasters(res.data.results || res.data)
+      })
+      .catch(() => setMasters([]))
+      .finally(() => setLoading(false))
   }, [])
 
   const markers = masters

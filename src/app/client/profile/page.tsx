@@ -17,8 +17,11 @@ export default function ClientProfilePage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await authAPI.updateProfile(form)
-    setUser(res.data)
+    try {
+      const res = await authAPI.updateProfile(form)
+      setUser(res.data)
+    } catch {
+    }
   }
 
   if (isLoading) {

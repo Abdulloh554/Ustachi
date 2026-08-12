@@ -10,7 +10,7 @@ import {
 import { formatMoney } from '@/lib/utils'
 
 interface Stat {
-  product_id: number
+  product_id: string
   name: string
   quantity_sold: number
   revenue: string
@@ -23,7 +23,7 @@ export default function SellerStatisticsPage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    storeAPI.statistics().then((res) => setData(res.data))
+    storeAPI.statistics().then((res) => setData(res.data)).catch(() => setData(null))
   }, [])
 
   useEffect(() => {

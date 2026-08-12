@@ -45,6 +45,7 @@ export default function AdminSettingsPage() {
         }
         setForm(data)
       })
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
@@ -56,6 +57,7 @@ export default function AdminSettingsPage() {
       await settingsAPI.update(form)
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
+    } catch {
     } finally {
       setSaving(false)
     }

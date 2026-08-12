@@ -53,7 +53,7 @@ export default function MasterOrdersPage() {
     setLoading(false)
   }
 
-  const handleAccept = async (id: number) => {
+  const handleAccept = async (id: string) => {
     setError('')
     try {
       await orderAPI.accept(id)
@@ -66,7 +66,7 @@ export default function MasterOrdersPage() {
     }
   }
 
-  const handleStatusChange = async (id: number, status: string) => {
+  const handleStatusChange = async (id: string, status: string) => {
     try {
       await orderAPI.updateStatus(id, status)
       loadMyOrders()
@@ -77,7 +77,7 @@ export default function MasterOrdersPage() {
     }
   }
 
-  const handleCancel = async (id: number) => {
+  const handleCancel = async (id: string) => {
     setError('')
     try {
       await orderAPI.cancel(id)

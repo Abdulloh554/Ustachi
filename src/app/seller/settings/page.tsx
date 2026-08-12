@@ -16,18 +16,24 @@ export default function SellerSettingsPage() {
   const [passSuccess, setPassSuccess] = useState(false)
 
   const changeLanguage = async (lang: string) => {
-    const res = await authAPI.updateProfile({ language: lang })
-    setUser(res.data)
-    setLangSuccess(true)
-    setTimeout(() => setLangSuccess(false), 2000)
+    try {
+      const res = await authAPI.updateProfile({ language: lang })
+      setUser(res.data)
+      setLangSuccess(true)
+      setTimeout(() => setLangSuccess(false), 2000)
+    } catch {
+    }
   }
 
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault()
-    await authAPI.changePassword(passwordForm)
-    setPasswordForm({ old_password: '', new_password: '' })
-    setPassSuccess(true)
-    setTimeout(() => setPassSuccess(false), 2000)
+    try {
+      await authAPI.changePassword(passwordForm)
+      setPasswordForm({ old_password: '', new_password: '' })
+      setPassSuccess(true)
+      setTimeout(() => setPassSuccess(false), 2000)
+    } catch {
+    }
   }
 
   if (isLoading) {

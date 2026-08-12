@@ -14,10 +14,14 @@ export default function AdminMapPage() {
   const [data, setData] = useState<{ orders: any[]; masters: any[] }>({ orders: [], masters: [] })
 
   useEffect(() => {
-    adminAPI.map().then((res) => {
-      setData(res.data)
-      setLoading(false)
-    })
+    adminAPI.map()
+      .then((res) => {
+        setData(res.data)
+      })
+      .catch(() => {
+        setData({ orders: [], masters: [] })
+      })
+      .finally(() => setLoading(false))
   }, [])
 
   const orderMarkers = data.orders.map((o: any) => ({

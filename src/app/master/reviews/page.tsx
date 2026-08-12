@@ -13,10 +13,12 @@ export default function MasterReviewsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    reviewAPI.myReviews().then((res) => {
-      setReviews(res.data.results || res.data)
-      setLoading(false)
-    })
+    reviewAPI.myReviews()
+      .then((res) => {
+        setReviews(res.data.results || res.data)
+      })
+      .catch(() => setReviews([]))
+      .finally(() => setLoading(false))
   }, [])
 
   return (

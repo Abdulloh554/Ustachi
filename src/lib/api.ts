@@ -79,31 +79,34 @@ export const authAPI = {
 export const orderAPI = {
   list: (params?: any) => api.get('/orders/', { params }),
   create: (data: any) => api.post('/orders/', data),
-  detail: (id: number) => api.get(`/orders/${id}/`),
-  accept: (id: number) => api.post(`/orders/${id}/accept/`),
-  cancel: (id: number) => api.post(`/orders/${id}/cancel/`),
-  updateStatus: (id: number, status: string) => api.post(`/orders/${id}/update_status/`, { status }),
-  logs: (id: number) => api.get(`/orders/${id}/logs/`),
+  detail: (id: string) => api.get(`/orders/${id}/`),
+  accept: (id: string) => api.post(`/orders/${id}/accept/`),
+  cancel: (id: string) => api.post(`/orders/${id}/cancel/`),
+  updateStatus: (id: string, status: string) => api.post(`/orders/${id}/update_status/`, { status }),
+  logs: (id: string) => api.get(`/orders/${id}/logs/`),
 }
 
 export const chatAPI = {
   listConversations: () => api.get('/chat/conversations/'),
-  messages: (id: number) => api.get(`/chat/conversations/${id}/messages/`),
-  send: (id: number, text: string) => api.post(`/chat/conversations/${id}/messages/`, { text }),
+  messages: (id: string) => api.get(`/chat/conversations/${id}/messages/`),
+  send: (id: string, text: string, replyTo?: string) => api.post(`/chat/conversations/${id}/messages/`, { text, reply_to: replyTo }),
+  edit: (id: string, messageId: string, text: string) => api.patch(`/chat/conversations/${id}/messages/${messageId}/`, { text }),
+  del: (id: string, messageId: string) => api.delete(`/chat/conversations/${id}/messages/${messageId}/`),
 }
 
-export async function chatWebSocketUrl(conversationId: number): Promise<string> {
+export async function chatWebSocketUrl(conversationId: string): Promise<string> {
   const base = API_URL
   const protocol = base.startsWith('https') ? 'wss' : 'ws'
   const host = base.replace(/^https?:\/\//, '').replace(/\/api\/?$/, '')
-  const token = (await ensureAccessToken()) || ''
-  return `${protocol}://${host}/ws/chat/${conversationId}/?token=${encodeURIComponent(token)}`
+  // WebSocket authenticates with the HttpOnly access-token cookie. Putting a
+  // bearer token in the URL would expose it to access logs and referrers.
+  return `${protocol}://${host}/ws/chat/${conversationId}/`
 }
 
 export const masterAPI = {
   list: (params?: any) => api.get('/masters/', { params }),
-  detail: (id: number) => api.get(`/masters/${id}/`),
-  works: (id: number) => api.get(`/masters/${id}/orders/`),
+  detail: (id: string) => api.get(`/masters/${id}/`),
+  works: (id: string) => api.get(`/masters/${id}/orders/`),
   myProfile: () => api.get('/masters/me/profile/'),
   updateProfile: (data: any) => api.patch('/masters/me/profile/', data),
   availableOrders: () => api.get('/masters/available-orders/'),
@@ -122,7 +125,7 @@ export const adminAPI = {
   dashboard: () => api.get('/admin/dashboard/'),
   users: () => api.get('/admin/users/'),
   masters: () => api.get('/admin/masters/'),
-  orders: () => api.get('/admin/orders/'),
+  orders: (params?: any) => api.get('/admin/orders/', { params }),
   map: () => api.get('/admin/map/'),
 }
 
@@ -137,18 +140,18 @@ export const settingsAPI = {
 
 export const storeAPI = {
   products: (params?: any) => api.get('/stores/products/', { params }),
-  product: (id: number) => api.get(`/stores/products/${id}/`),
+  product: (id: string) => api.get(`/stores/products/${id}/`),
   favorites: () => api.get('/stores/favorites/'),
-  toggleFavorite: (productId: number) => api.post('/stores/favorites/toggle/', { product_id: productId }),
+  toggleFavorite: (productId: string) => api.post('/stores/favorites/toggle/', { product_id: productId }),
   cart: () => api.get('/stores/cart/'),
-  addToCart: (productId: number, quantity = 1) => api.post('/stores/cart/', { product_id: productId, quantity }),
-  removeFromCart: (id: number) => api.delete(`/stores/cart/${id}/`),
+  addToCart: (productId: string, quantity = 1) => api.post('/stores/cart/', { product_id: productId, quantity }),
+  removeFromCart: (id: string) => api.delete(`/stores/cart/${id}/`),
   checkout: () => api.post('/stores/cart/checkout/'),
   myStore: () => api.get('/stores/me/store/'),
   updateStore: (data: any) => api.put('/stores/me/store/', data),
   myProducts: () => api.get('/stores/me/products/'),
   createProduct: (data: any) => api.post('/stores/me/products/', data),
-  updateProduct: (id: number, data: any) => api.patch(`/stores/me/products/${id}/`, data),
-  deleteProduct: (id: number) => api.delete(`/stores/me/products/${id}/`),
+  updateProduct: (id: string, data: any) => api.patch(`/stores/me/products/${id}/`, data),
+  deleteProduct: (id: string) => api.delete(`/stores/me/products/${id}/`),
   statistics: () => api.get('/stores/me/statistics/'),
 }

@@ -11,10 +11,14 @@ export default function AdminMastersPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    adminAPI.masters().then((res) => {
-      setMasters(res.data.results || res.data)
-      setLoading(false)
-    })
+    adminAPI.masters()
+      .then((res) => {
+        setMasters(res.data.results || res.data)
+      })
+      .catch(() => {
+        setMasters([])
+      })
+      .finally(() => setLoading(false))
   }, [])
 
   return (

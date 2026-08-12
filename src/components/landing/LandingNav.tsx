@@ -26,7 +26,11 @@ export default function LandingNav() {
             <div className="skeleton h-9 w-32 rounded-full" />
           ) : user ? (
             <Link
-              href={user.role === 'client' ? '/client' : user.role === 'master' ? '/master' : '/admin'}
+              href={
+                user.role === 'client' ? '/client' :
+                user.role === 'master' ? '/master' :
+                user.role === 'seller' ? '/seller' : '/admin'
+              }
               className="btn btn-primary px-4 py-2 text-sm"
             >
               {t('nav.go_to_panel')} <ArrowRight size={15} />

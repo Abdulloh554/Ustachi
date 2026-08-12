@@ -15,7 +15,7 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const conversationId = Number(params?.id)
+  const conversationId = params?.id ? String(params.id) : ''
 
   useEffect(() => {
     if (!conversationId) return

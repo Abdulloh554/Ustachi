@@ -18,16 +18,19 @@ export default function AdminOrdersPage() {
   }, [statusFilter])
 
   const loadOrders = async () => {
-    const params: any = {}
-    if (statusFilter) params.status = statusFilter
-    const res = await adminAPI.orders()
-    let data = res.data.results || res.data
-    if (statusFilter) data = data.filter((o: any) => o.status === statusFilter)
-    setOrders(data)
-    setLoading(false)
+    try {
+      const params: any = {}
+      if (statusFilter) params.status = statusFilter
+      const res = await adminAPI.orders(params)
+      setOrders(res.data.results || res.data)
+    } catch {
+      setOrders([])
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const statuses = ['new', 'accepted', 'coming', 'in_progress', 'completed', 'failed']
+  const statuses = ['new', 'accepted', 'coming', 'in_progress', 'completed', 'failed', 'cancelled']
 
   return (
     <div>
@@ -44,9 +47,9 @@ export default function AdminOrdersPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`pill text-sm capitalize ${statusFilter === s ? 'active' : ''}`}
+            className={`pill text-sm ${statusFilter === s ? 'active' : ''}`}
           >
-            {s.replace('_', ' ')}
+            {t(`status.${s}`)}
           </button>
         ))}
       </div>

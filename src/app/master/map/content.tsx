@@ -42,11 +42,13 @@ export default function MasterMapContent() {
   const [browserLoc, setBrowserLoc] = useState<[number, number] | null>(null)
 
   useEffect(() => {
-    orderAPI.list().then((res) => {
-      const all = res.data.results || res.data
-      setOrders(all.filter((o: any) => ['accepted', 'coming', 'in_progress'].includes(o.status)))
-      setLoading(false)
-    })
+    orderAPI.list()
+      .then((res) => {
+        const all = res.data.results || res.data
+        setOrders(all.filter((o: any) => ['accepted', 'coming', 'in_progress'].includes(o.status)))
+      })
+      .catch(() => setOrders([]))
+      .finally(() => setLoading(false))
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setBrowserLoc([pos.coords.latitude, pos.coords.longitude]),

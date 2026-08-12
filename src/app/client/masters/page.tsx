@@ -17,16 +17,21 @@ export default function ClientMastersPage() {
 
   useEffect(() => {
     loadMasters()
-    professionAPI.list().then((res) => setProfessions(res.data.results || res.data))
+    professionAPI.list().then((res) => setProfessions(res.data.results || res.data)).catch(() => setProfessions([]))
   }, [filterProfession])
 
   const loadMasters = async () => {
     setLoading(true)
-    const params: any = { ordering: '-rating' }
-    if (filterProfession) params.professions = filterProfession
-    const res = await masterAPI.list(params)
-    setMasters(res.data.results || res.data)
-    setLoading(false)
+    try {
+      const params: any = { ordering: '-rating' }
+      if (filterProfession) params.professions = filterProfession
+      const res = await masterAPI.list(params)
+      setMasters(res.data.results || res.data)
+    } catch {
+      setMasters([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

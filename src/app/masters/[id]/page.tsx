@@ -20,8 +20,8 @@ export default function MasterDetailPage() {
   useEffect(() => {
     if (!id) return
     Promise.all([
-      masterAPI.detail(Number(id)),
-      masterAPI.works(Number(id)),
+      masterAPI.detail(String(id)),
+      masterAPI.works(String(id)),
     ])
       .then(([mRes, wRes]) => {
         setMaster(mRes.data)

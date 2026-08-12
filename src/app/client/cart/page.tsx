@@ -9,10 +9,10 @@ import { ShoppingCart, Trash2, Store, CheckCircle2, Loader2 } from 'lucide-react
 import { formatMoney } from '@/lib/utils'
 
 interface CartItem {
-  id: number
+  id: string
   quantity: number
   product: {
-    id: number
+    id: string
     name: string
     category: string
     price: string
@@ -45,7 +45,7 @@ export default function ClientCartPage() {
     load()
   }, [load])
 
-  const remove = async (id: number) => {
+  const remove = async (id: string) => {
     await storeAPI.removeFromCart(id)
     load()
   }

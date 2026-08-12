@@ -2,15 +2,15 @@ import { Star, ArrowUpRight, Briefcase } from 'lucide-react'
 import Link from 'next/link'
 
 interface Master {
-  id: number
+  id: string
   user: {
-    id: number
+    id: string
     phone: string
     first_name: string
     last_name: string
     avatar: string | null
   }
-  professions: Array<{ id: number; name_uz: string; icon: string }>
+  professions: Array<{ id: string; name_uz: string; icon: string }>
   bio: string
   rating: number
   rating_count: number

@@ -2,14 +2,14 @@ import { create } from 'zustand'
 import { orderAPI } from '@/lib/api'
 
 interface Order {
-  id: number
-  client: number
+  id: string
+  client: string
   client_details?: any
-  master: number | null
+  master: string | null
   master_details?: any
   title: string
   description: string
-  profession: number | null
+  profession: string | null
   status: string
   location_lat: number
   location_lng: number

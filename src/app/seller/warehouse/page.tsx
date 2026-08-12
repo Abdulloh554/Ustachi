@@ -9,7 +9,7 @@ import { formatMoney } from '@/lib/utils'
 import ProductFormModal, { ProductFormData, emptyProductForm } from '@/components/seller/ProductFormModal'
 
 interface Product {
-  id: number
+  id: string
   name: string
   category: string
   price: string
@@ -26,7 +26,7 @@ export default function SellerWarehousePage() {
   const [editing, setEditing] = useState<Product | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [busyId, setBusyId] = useState<number | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -40,7 +40,7 @@ export default function SellerWarehousePage() {
     load()
   }, [load])
 
-  const changeQuantity = async (id: number, delta: number) => {
+  const changeQuantity = async (id: string, delta: number) => {
     const product = products.find((p) => p.id === id)
     if (!product) return
     const next = Math.max(0, product.quantity + delta)
@@ -96,10 +96,14 @@ export default function SellerWarehousePage() {
     }
   }
 
-  const remove = async (id: number) => {
+  const remove = async (id: string) => {
     if (!window.confirm(t('seller.delete_product') + '?')) return
-    await storeAPI.deleteProduct(id)
-    load()
+    try {
+      await storeAPI.deleteProduct(id)
+      load()
+    } catch {
+      load()
+    }
   }
 
   if (loading) {

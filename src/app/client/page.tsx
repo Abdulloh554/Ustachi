@@ -23,25 +23,31 @@ export default function ClientOrdersPage() {
 
   useEffect(() => {
     loadOrders()
-    professionAPI.list().then((res) => setProfessions(res.data.results || res.data))
+    professionAPI.list().then((res) => setProfessions(res.data.results || res.data)).catch(() => setProfessions([]))
   }, [])
 
   const loadOrders = async () => {
-    const res = await orderAPI.list()
-    const all = res.data.results || res.data
-    setOrders(all)
-    const myId = String(user?.id)
-    setPending(all.filter((o: any) =>
-      o.status === 'completed' && !o.my_review &&
-      String(o.client?.id || o.client) === myId
-    ))
-    setLoading(false)
+    try {
+      const res = await orderAPI.list()
+      const all = res.data.results || res.data
+      setOrders(all)
+      const myId = String(user?.id)
+      setPending(all.filter((o: any) =>
+        o.status === 'completed' && !o.my_review &&
+        String(o.client?.id || o.client) === myId
+      ))
+    } catch {
+      setOrders([])
+      setPending([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleCreate = async (form: any) => {
     await orderAPI.create({
       ...form,
-      profession: form.profession ? parseInt(form.profession) : null,
+      profession: form.profession || null,
     })
     setShowModal(false)
     loadOrders()
@@ -66,7 +72,7 @@ export default function ClientOrdersPage() {
     }
   }
 
-  const handleCancel = async (id: number) => {
+  const handleCancel = async (id: string) => {
     try {
       await orderAPI.cancel(id)
       loadOrders()

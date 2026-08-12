@@ -8,24 +8,24 @@ import { Package, Heart, ShoppingCart, Store, Search, Check } from 'lucide-react
 import { formatMoney } from '@/lib/utils'
 
 interface Product {
-  id: number
+  id: string
   name: string
   description: string
   category: string
   price: string
   quantity: number
-  store: number
+  store: string
   store_name: string
 }
 
 export default function ClientStorePage() {
   const { t } = useTranslation()
   const [products, setProducts] = useState<Product[]>([])
-  const [savedIds, setSavedIds] = useState<Set<number>>(new Set())
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState('')
   const [tab, setTab] = useState<'all' | 'saved'>('all')
-  const [added, setAdded] = useState<Set<number>>(new Set())
+  const [added, setAdded] = useState<Set<string>>(new Set())
 
   const loadProducts = useCallback(() => {
     storeAPI.products()
@@ -48,17 +48,20 @@ export default function ClientStorePage() {
     loadFavorites()
   }, [loadProducts, loadFavorites])
 
-  const toggleFavorite = async (id: number) => {
-    const res = await storeAPI.toggleFavorite(id)
-    setSavedIds((prev) => {
-      const next = new Set(prev)
-      if (res.data.favorited) next.add(id)
-      else next.delete(id)
-      return next
-    })
+  const toggleFavorite = async (id: string) => {
+    try {
+      const res = await storeAPI.toggleFavorite(id)
+      setSavedIds((prev) => {
+        const next = new Set(prev)
+        if (res.data.favorited) next.add(id)
+        else next.delete(id)
+        return next
+      })
+    } catch {
+    }
   }
 
-  const addToCart = async (id: number) => {
+  const addToCart = async (id: string) => {
     try {
       await storeAPI.addToCart(id, 1)
       setAdded((prev) => new Set(prev).add(id))

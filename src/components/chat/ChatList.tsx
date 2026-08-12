@@ -10,10 +10,10 @@ import EmptyState from '@/components/ui/EmptyState'
 import { Skeleton } from '@/components/ui/Skeleton'
 
 interface ConversationData {
-  id: number
-  order_id?: number
+  id: string
+  order_id?: string
   order_title?: string
-  other_user_id?: number
+  other_user_id?: string
   other_user_name?: string
   other_user_role?: string
   last_message?: string | null

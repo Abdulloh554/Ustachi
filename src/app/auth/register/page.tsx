@@ -57,7 +57,7 @@ export default function RegisterPage() {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const toggleProfession = (id: number) => {
+  const toggleProfession = (id: string) => {
     setForm((prev) => ({
       ...prev,
       profession_ids: prev.profession_ids.includes(id)

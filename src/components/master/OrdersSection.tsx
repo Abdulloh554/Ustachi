@@ -14,9 +14,9 @@ interface OrdersSectionProps {
   acceptPrice?: number
   acceptDisabled?: boolean
   emptyAction?: React.ReactNode
-  onAccept?: (id: number) => void
-  onStatusChange?: (id: number, status: string) => void
-  onCancel?: (id: number) => void
+  onAccept?: (id: string) => void
+  onStatusChange?: (id: string, status: string) => void
+  onCancel?: (id: string) => void
 }
 
 export default function OrdersSection({

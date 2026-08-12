@@ -6,6 +6,7 @@ import { DashboardSkeleton } from '@/components/ui/Skeleton'
 import CountUp from '@/components/ui/CountUp'
 import { useTranslation } from 'react-i18next'
 import { Users, ClipboardList, Wrench, Activity } from 'lucide-react'
+import { getStatusLabel } from '@/lib/utils'
 
 export default function AdminDashboardPage() {
   const { t } = useTranslation()
@@ -13,7 +14,7 @@ export default function AdminDashboardPage() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    adminAPI.dashboard().then((res) => setData(res.data))
+    adminAPI.dashboard().then((res) => setData(res.data)).catch(() => setData(null))
   }, [])
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export default function AdminDashboardPage() {
               className="flex items-center justify-between animate-fade-in-up"
               style={{ animationDelay: `${200 + index * 40}ms` }}
             >
-              <span className="text-sm capitalize">{status.replace('_', ' ')}</span>
+              <span className="text-sm capitalize">{getStatusLabel(status)}</span>
               <div className="flex items-center gap-3 flex-1 ml-4">
                 <div className="progress flex-1">
                   <div

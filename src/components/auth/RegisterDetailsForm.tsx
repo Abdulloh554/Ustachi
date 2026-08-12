@@ -11,7 +11,7 @@ export interface RegisterFormData {
   first_name: string
   last_name: string
   role: 'client' | 'master' | 'seller'
-  profession_ids: number[]
+  profession_ids: string[]
   bio: string
   experience_years: number
 }
@@ -23,7 +23,7 @@ interface RegisterDetailsFormProps {
   submitting: boolean
   error: string
   onChange: (field: string, value: any) => void
-  onToggleProfession: (id: number) => void
+  onToggleProfession: (id: string) => void
   onSubmit: (e: React.FormEvent) => void
   onBack: () => void
 }

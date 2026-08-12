@@ -6,11 +6,11 @@ import { SkeletonPills } from '@/components/ui/Skeleton'
 interface MasterFieldsProps {
   professions: any[]
   loading: boolean
-  selectedIds: number[]
+  selectedIds: string[]
   bio: string
   experienceYears: number
   onChange: (field: string, value: any) => void
-  onToggleProfession: (id: number) => void
+  onToggleProfession: (id: string) => void
 }
 
 export function MasterFields({

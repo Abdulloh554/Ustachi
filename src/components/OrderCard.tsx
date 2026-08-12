@@ -9,14 +9,14 @@ import OrderClientInfo from '@/components/order/OrderClientInfo'
 import OrderActions from '@/components/order/OrderActions'
 
 interface Order {
-  id: number
+  id: string
   title: string
   description: string
   status: string
   price: string | null
   address: string
   created_at: string
-  conversation_id?: number | null
+  conversation_id?: string | null
   client_details?: { phone: string; first_name: string }
   master_details?: { phone: string; first_name: string }
 }
