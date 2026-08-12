@@ -11,10 +11,12 @@ import { MessageSquare, Send, ArrowLeft, Loader2, CornerUpLeft, Pencil, Trash2, 
 interface MessageData {
   id: string
   sender: string
+  sender_details?: { id: string } | null
   sender_name?: string
   sender_role?: string
   text: string
   edited?: boolean
+  is_read?: boolean
   reply_to?: { id: string; text: string } | string | null
   created_at: string
 }
@@ -193,7 +195,10 @@ export default function ChatWindow({
     }
   }
 
-  const isMine = (message: MessageData) => user?.id === message.sender
+  const myId = user?.id ? String(user.id) : null
+  const isMine = (message: MessageData) =>
+    !!myId &&
+    (String(message.sender) === myId || String(message.sender_details?.id) === myId)
 
   const replyTextOf = (message: MessageData) =>
     typeof message.reply_to === 'object' && message.reply_to ? message.reply_to.text : null
@@ -319,12 +324,17 @@ export default function ChatWindow({
                     )}
                     <p className="whitespace-pre-wrap break-words">{message.text}</p>
                     <p
-                      className="text-[10px] mt-1"
+                      className="text-[10px] mt-1 flex items-center gap-1 justify-end"
                       style={{ color: mine ? 'rgba(255,255,255,0.75)' : 'var(--text-light)' }}
                     >
-                      {formatDate(message.created_at)}
+                      <span>{formatDate(message.created_at)}</span>
+                      {mine && (
+                        <span className="opacity-90" style={message.is_read ? { color: '#4ade80' } : { color: 'rgba(255,255,255,0.5)' }}>
+                          {message.is_read ? '✓✓' : '✓'}
+                        </span>
+                      )}
                       {message.edited && (
-                        <span className="ml-1 italic opacity-80">{t('chat.edited')}</span>
+                        <span className="italic opacity-80">{t('chat.edited')}</span>
                       )}
                     </p>
                   </div>
