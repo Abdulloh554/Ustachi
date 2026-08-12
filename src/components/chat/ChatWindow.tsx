@@ -50,8 +50,10 @@ export default function ChatWindow({
         if (cancelled) return
         setMessages(res.data.results || res.data || [])
       })
-      .catch(() => {
-        if (!cancelled) setError(t('chat.load_error'))
+      .catch((err: any) => {
+        if (cancelled) return
+        const data = err.response?.data
+        setError(typeof data === 'string' ? data : data?.error || t('chat.load_error'))
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -224,7 +226,7 @@ export default function ChatWindow({
       </div>
 
       <div
-        className="flex-1 overflow-y-auto rounded-2xl p-4 space-y-3"
+        className="flex-1 overflow-y-auto rounded-2xl p-4 pt-12 space-y-3"
         style={{ background: 'var(--bg-secondary)' }}
         onClick={() => setSelectedId(null)}
       >

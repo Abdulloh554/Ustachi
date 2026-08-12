@@ -21,6 +21,7 @@ export default function RootLayout({
     <html
       lang="uz"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
