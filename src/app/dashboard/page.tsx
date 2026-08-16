@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import {
-  ClipboardList, Timer, PlayCircle, CheckCircle2, Banknote, Users, AlertTriangle,
+  ClipboardList, Timer, PlayCircle, CheckCircle2, Banknote, Users, AlertTriangle, MonitorPlay,
 } from 'lucide-react'
 import { workshopAPI } from '@/lib/api'
 import { DashboardSkeleton } from '@/components/ui/Skeleton'
@@ -77,9 +77,14 @@ export default function OwnerDashboardPage() {
               <h2 className="font-semibold">{t('crm.queue_title')}</h2>
               <p className="text-xs mt-0.5" style={{ color: 'var(--text-light)' }}>{t('crm.queue_subtitle')}</p>
             </div>
-            <Link href="/dashboard/orders" className="text-sm font-semibold" style={{ color: 'var(--primary)' }}>
-              {t('crm.details')} →
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link href="/queue-board" className="text-sm font-semibold flex items-center gap-1.5" style={{ color: 'var(--primary)' }}>
+                <MonitorPlay size={14} /> {t('crm.open_board')} →
+              </Link>
+              <Link href="/dashboard/orders" className="text-sm font-semibold" style={{ color: 'var(--primary)' }}>
+                {t('crm.details')} →
+              </Link>
+            </div>
           </div>
 
           {data.queue.length === 0 ? (

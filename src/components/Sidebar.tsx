@@ -8,7 +8,7 @@ import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, ClipboardList, Users, Wrench, Boxes, BarChart3,
-  Settings, LogOut, Sun, Moon, Menu, X, CalendarCheck, MessageSquare, UserRound,
+  Settings, LogOut, Sun, Moon, Menu, X, CalendarCheck, MessageSquare, UserRound, MonitorPlay,
 } from 'lucide-react'
 import SidebarHeader from '@/components/sidebar/SidebarHeader'
 import SidebarNav, { SidebarLink } from '@/components/sidebar/SidebarNav'
@@ -21,6 +21,7 @@ const ownerLinks: SidebarLink[] = [
   { href: '/dashboard/services', labelKey: 'sidebar.services', icon: Wrench },
   { href: '/dashboard/inventory', labelKey: 'sidebar.inventory', icon: Boxes },
   { href: '/dashboard/reports', labelKey: 'sidebar.reports', icon: BarChart3 },
+  { href: '/queue-board', labelKey: 'sidebar.queue_board', icon: MonitorPlay },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
   { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/dashboard/settings', labelKey: 'sidebar.settings', icon: Settings },
@@ -29,6 +30,7 @@ const ownerLinks: SidebarLink[] = [
 const staffLinks: SidebarLink[] = [
   { href: '/staff', labelKey: 'sidebar.today', icon: CalendarCheck },
   { href: '/staff/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
+  { href: '/queue-board', labelKey: 'sidebar.queue_board', icon: MonitorPlay },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
   { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/staff/settings', labelKey: 'sidebar.settings', icon: Settings },

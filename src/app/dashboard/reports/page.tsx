@@ -62,17 +62,31 @@ export default function ReportsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card rounded-2xl p-6">
           <h2 className="font-semibold mb-4">{t('crm.by_status')}</h2>
-          <ul className="space-y-2">
-            {Object.entries(data.by_status || {}).map(([status, count]) => (
-              <li key={status} className="flex items-center justify-between text-sm">
-                <span className="capitalize" style={{ color: 'var(--text)' }}>{t(`status.${status}`)}</span>
-                <span className="font-semibold">{count as number}</span>
-              </li>
-            ))}
-            {!data.by_status || Object.keys(data.by_status).length === 0 ? (
-              <li className="text-sm" style={{ color: 'var(--text-light)' }}>{t('crm.no_active')}</li>
-            ) : null}
-          </ul>
+          {(() => {
+            const entries = Object.entries(data.by_status || {})
+            const max = Math.max(1, ...entries.map(([, c]) => c as number))
+            return (
+              <ul className="space-y-3">
+                {entries.map(([status, count]) => (
+                  <li key={status}>
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <span className="capitalize" style={{ color: 'var(--text)' }}>{t(`status.${status}`)}</span>
+                      <span className="font-semibold tabular-nums">{count as number}</span>
+                    </div>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--bg-secondary)' }}>
+                      <div
+                        className="h-full rounded-full transition-all"
+                        style={{ width: `${((count as number) / max) * 100}%`, background: 'var(--primary)' }}
+                      />
+                    </div>
+                  </li>
+                ))}
+                {entries.length === 0 ? (
+                  <li className="text-sm" style={{ color: 'var(--text-light)' }}>{t('crm.no_active')}</li>
+                ) : null}
+              </ul>
+            )
+          })()}
         </div>
 
         <div className="card rounded-2xl p-6">
@@ -111,19 +125,30 @@ export default function ReportsPage() {
 
         <div className="card rounded-2xl p-6">
           <h2 className="font-semibold mb-4">{t('crm.daily')}</h2>
-          <ul className="space-y-2">
-            {data.daily.map((d: any) => (
-              <li key={d.date} className="flex items-center justify-between text-sm">
-                <span style={{ color: 'var(--text)' }}>{d.date}</span>
-                <span className="font-semibold">
-                  {d.orders} · {formatMoney(d.revenue)} so'm
-                </span>
-              </li>
-            ))}
-            {data.daily.length === 0 ? (
-              <li className="text-sm" style={{ color: 'var(--text-light)' }}>{t('crm.no_active')}</li>
-            ) : null}
-          </ul>
+          {data.daily.length === 0 ? (
+            <p className="text-sm" style={{ color: 'var(--text-light)' }}>{t('crm.no_active')}</p>
+          ) : (
+            <div className="flex items-end gap-3 h-44">
+              {(() => {
+                const max = Math.max(1, ...data.daily.map((d: any) => d.revenue))
+                return data.daily.map((d: any) => (
+                  <div key={d.date} className="flex-1 flex flex-col items-center gap-1 h-full">
+                    <span className="text-[10px] tabular-nums" style={{ color: 'var(--text-light)' }}>{formatMoney(d.revenue)}</span>
+                    <div
+                      className="w-full rounded-t-lg transition-all"
+                      title={`${d.date}: ${d.orders} · ${formatMoney(d.revenue)}`}
+                      style={{
+                        height: `${Math.max(5, (d.revenue / max) * 100)}%`,
+                        background: 'var(--primary)',
+                        minHeight: 5,
+                      }}
+                    />
+                    <span className="text-[10px] whitespace-nowrap" style={{ color: 'var(--text-secondary)' }}>{d.date}</span>
+                  </div>
+                ))
+              })()}
+            </div>
+          )}
         </div>
       </div>
     </div>

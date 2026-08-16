@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Play, CheckCircle, X, UserX, Loader2, PackagePlus } from 'lucide-react'
+import { Play, CheckCircle, X, UserX, Loader2, PackagePlus, Receipt } from 'lucide-react'
 import { orderAPI } from '@/lib/api'
 import Modal from '@/components/crm/Modal'
+import ReceiptModal from '@/components/crm/ReceiptModal'
 import { useAuthStore } from '@/store/authStore'
 
 export default function OrderActions({
@@ -31,6 +32,7 @@ export default function OrderActions({
   const [showConsume, setShowConsume] = useState(false)
   const [consumeProduct, setConsumeProduct] = useState('')
   const [consumeQty, setConsumeQty] = useState(1)
+  const [showReceipt, setShowReceipt] = useState(false)
 
   const run = async (fn: () => Promise<any>) => {
     setBusy(true)
@@ -73,6 +75,7 @@ export default function OrderActions({
   const canCancel = isOwner && (status === 'queued' || status === 'assigned')
   const canNoShow = isOwner && (status === 'queued' || status === 'assigned')
   const canConsume = (isOwner || role === 'staff') && status === 'in_progress' && products.length > 0
+  const canReceipt = status === 'completed'
 
   return (
     <div>
@@ -127,6 +130,16 @@ export default function OrderActions({
             style={{ borderColor: 'var(--border)' }}
           >
             <PackagePlus size={14} className="mr-1 inline" /> {t('crm.consume')}
+          </button>
+        )}
+
+        {canReceipt && (
+          <button
+            className="btn !py-1.5 !h-auto text-sm"
+            onClick={() => setShowReceipt(true)}
+            style={{ borderColor: 'var(--border)' }}
+          >
+            <Receipt size={14} className="mr-1 inline" /> {t('crm.receipt_title')}
           </button>
         )}
 
@@ -204,6 +217,8 @@ export default function OrderActions({
           </button>
         </div>
       </Modal>
+
+      <ReceiptModal orderId={order.id} open={showReceipt} onClose={() => setShowReceipt(false)} />
     </div>
   )
 }

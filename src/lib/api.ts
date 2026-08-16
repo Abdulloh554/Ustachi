@@ -96,6 +96,7 @@ export const orderAPI = {
   consume: (id: string, productId: string, quantity: number) =>
     api.post(`/orders/${id}/consume/`, { product_id: productId, quantity }),
   logs: (id: string) => api.get(`/orders/${id}/logs/`),
+  receipt: (id: string) => api.get(`/orders/${id}/receipt/`),
 }
 
 export const workshopAPI = {
