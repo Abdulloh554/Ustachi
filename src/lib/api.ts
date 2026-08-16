@@ -105,6 +105,7 @@ export const workshopAPI = {
   updateMe: (data: any) => api.put('/workshops/me/', data),
   dashboard: () => api.get('/workshops/me/dashboard/'),
   reports: (params?: any) => api.get('/workshops/me/reports/', { params }),
+  reportSummary: (data: any) => api.post('/workshops/me/reports/summary/', data),
 
   staffList: () => api.get('/workshops/me/staff/'),
   staffCreate: (data: any) => api.post('/workshops/me/staff/', data),

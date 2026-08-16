@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Banknote, Wallet, PiggyBank, CheckCircle2 } from 'lucide-react'
+import { Banknote, Wallet, PiggyBank, CheckCircle2, Sparkles } from 'lucide-react'
 import { workshopAPI } from '@/lib/api'
 import StatCard from '@/components/crm/StatCard'
 import { DashboardSkeleton } from '@/components/ui/Skeleton'
@@ -20,6 +20,9 @@ export default function ReportsPage() {
   const [from, setFrom] = useState(todayStr())
   const [to, setTo] = useState(todayStr())
   const [data, setData] = useState<any>(null)
+  const [aiSummary, setAiSummary] = useState<{ summary: string; recommendation: string } | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState(false)
 
   const load = useCallback(async (fromD: string, toD: string) => {
     try {
@@ -33,6 +36,23 @@ export default function ReportsPage() {
   useEffect(() => {
     load(from, to)
   }, [from, to, load])
+
+  const generateSummary = useCallback(async () => {
+    setAiLoading(true)
+    setAiError(false)
+    try {
+      const res = await workshopAPI.reportSummary({ from, to })
+      if (res.data?.ai_summary) {
+        setAiSummary(res.data.ai_summary)
+      } else {
+        setAiError(true)
+      }
+    } catch {
+      setAiError(true)
+    } finally {
+      setAiLoading(false)
+    }
+  }, [from, to])
 
   if (!data) return <DashboardSkeleton />
 
@@ -57,6 +77,48 @@ export default function ReportsPage() {
         <StatCard label={t('crm.expense')} value={`${formatMoney(data.expense)} so'm`} icon={Wallet} accent="danger" />
         <StatCard label={t('crm.net_profit')} value={`${formatMoney(data.net_profit)} so'm`} icon={PiggyBank} />
         <StatCard label={t('crm.orders_completed')} value={data.orders_completed} icon={CheckCircle2} />
+      </div>
+
+      <div className="card rounded-2xl p-6 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <h2 className="font-semibold flex items-center gap-2">
+            <Sparkles className="w-5 h-5" style={{ color: 'var(--primary)' }} />
+            {t('crm.ai_summary')}
+          </h2>
+          {!aiLoading && aiSummary ? (
+            <button className="btn btn-outline text-sm" onClick={generateSummary}>
+              {t('crm.ai_regenerate')}
+            </button>
+          ) : null}
+        </div>
+
+        {!aiSummary && !aiLoading && !aiError ? (
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{t('crm.ai_summary_hint')}</p>
+        ) : null}
+
+        {aiLoading ? (
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('crm.ai_generating')}</p>
+        ) : null}
+
+        {aiError && !aiLoading ? (
+          <p className="text-sm mb-4" style={{ color: 'var(--danger)' }}>{t('crm.ai_summary_error')}</p>
+        ) : null}
+
+        {aiSummary ? (
+          <div className="space-y-3">
+            <p className="text-sm leading-relaxed">{aiSummary.summary}</p>
+            <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--bg-secondary)' }}>
+              <span className="font-semibold block mb-1">{t('crm.ai_recommendation')}</span>
+              {aiSummary.recommendation}
+            </div>
+          </div>
+        ) : null}
+
+        {!aiSummary && !aiLoading ? (
+          <button className="btn btn-primary" onClick={generateSummary}>
+            {t('crm.ai_generate')}
+          </button>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
