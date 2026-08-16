@@ -7,7 +7,7 @@ import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, ClipboardList, Settings, CalendarCheck,
-  MessageSquare, Users, Wrench, Boxes, BarChart3,
+  MessageSquare, Users, Wrench, Boxes, BarChart3, UserRound,
 } from 'lucide-react'
 
 const ownerLinks = [
@@ -23,14 +23,17 @@ const staffLinks = [
   { href: '/staff', labelKey: 'sidebar.today', icon: CalendarCheck },
   { href: '/staff/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
 ]
 
 const clientLinks = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
 ]
 
 const adminLinks = [
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/admin/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 

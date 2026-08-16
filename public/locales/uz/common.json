@@ -506,5 +506,8 @@
   "crm.refresh": "Yangilash",
   "crm.select_staff": "Xodimni tanlang",
   "crm.client_scheduled": "Belgilangan vaqt",
-  "crm.schedule_optional": "Vaqt (ixtiyoriy)"
+  "crm.schedule_optional": "Vaqt (ixtiyoriy)",
+  "crm.change_photo": "Rasmni yangilash",
+  "crm.bot_title": "Telegram bot",
+  "crm.bot_desc": "Buyurtmalar va xabarlarni Telegram bot orqali ham kuzatib boring"
 }

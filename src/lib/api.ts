@@ -2,6 +2,13 @@ import axios from 'axios'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
+export function mediaUrl(path: string | null | undefined): string | null {
+  if (!path) return null
+  if (/^https?:\/\//.test(path)) return path
+  const origin = API_URL.replace(/\/api\/?$/, '')
+  return `${origin}${path.startsWith('/') ? '' : '/'}${path}`
+}
+
 let inMemoryToken: string | null = null
 let refreshPromise: Promise<string | null> | null = null
 
@@ -73,6 +80,7 @@ export const authAPI = {
   logout: () => api.post('/auth/logout/'),
   profile: () => api.get('/auth/profile/'),
   updateProfile: (data: any) => api.patch('/auth/profile/', data),
+  updateProfileForm: (form: FormData) => api.patch('/auth/profile/', form),
   changePassword: (data: any) => api.post('/auth/change-password/', data),
 }
 

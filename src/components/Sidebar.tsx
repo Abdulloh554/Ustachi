@@ -8,7 +8,7 @@ import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
   LayoutDashboard, ClipboardList, Users, Wrench, Boxes, BarChart3,
-  Settings, LogOut, Sun, Moon, Menu, X, CalendarCheck, MessageSquare,
+  Settings, LogOut, Sun, Moon, Menu, X, CalendarCheck, MessageSquare, UserRound,
 } from 'lucide-react'
 import SidebarHeader from '@/components/sidebar/SidebarHeader'
 import SidebarNav, { SidebarLink } from '@/components/sidebar/SidebarNav'
@@ -22,6 +22,7 @@ const ownerLinks: SidebarLink[] = [
   { href: '/dashboard/inventory', labelKey: 'sidebar.inventory', icon: Boxes },
   { href: '/dashboard/reports', labelKey: 'sidebar.reports', icon: BarChart3 },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/dashboard/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
@@ -29,16 +30,19 @@ const staffLinks: SidebarLink[] = [
   { href: '/staff', labelKey: 'sidebar.today', icon: CalendarCheck },
   { href: '/staff/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/staff/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
 const clientLinks: SidebarLink[] = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
   { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/client/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
 const adminLinks: SidebarLink[] = [
+  { href: '/profile', labelKey: 'sidebar.profile', icon: UserRound },
   { href: '/admin/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 

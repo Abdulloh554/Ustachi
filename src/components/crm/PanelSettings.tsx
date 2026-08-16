@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Loader2, Sun, Moon } from 'lucide-react'
+import { Loader2, Sun, Moon, Send, Info } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
 import { authAPI } from '@/lib/api'
+import { BOT_URL, BOT_USERNAME } from '@/lib/constants'
 import i18n from '@/lib/i18n'
 
 export default function PanelSettings() {
@@ -140,6 +141,35 @@ export default function PanelSettings() {
             {passError && <span className="text-sm error">{passError}</span>}
           </div>
         </form>
+      </div>
+
+      <div className="card rounded-2xl p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'var(--primary-light)', color: 'var(--primary-active)' }}>
+              <Send size={19} />
+            </span>
+            <div>
+              <h2 className="font-semibold">{t('crm.bot_title')}</h2>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>{t('crm.bot_desc')}</p>
+            </div>
+          </div>
+          <a href={BOT_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            <Send size={15} className="mr-1.5 inline" /> {BOT_USERNAME}
+          </a>
+        </div>
+      </div>
+
+      <div className="card rounded-2xl p-6 flex items-center gap-3">
+        <span className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}>
+          <Info size={19} />
+        </span>
+        <div>
+          <h2 className="font-semibold" style={{ color: 'var(--text)' }}>{t('app.name')}</h2>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('app.tagline')}</p>
+        </div>
       </div>
     </div>
   )

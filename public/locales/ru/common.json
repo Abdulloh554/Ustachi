@@ -506,5 +506,8 @@
   "crm.refresh": "Обновить",
   "crm.select_staff": "Выберите сотрудника",
   "crm.client_scheduled": "Запланированное время",
-  "crm.schedule_optional": "Время (необязательно)"
+  "crm.schedule_optional": "Время (необязательно)",
+  "crm.change_photo": "Обновить фото",
+  "crm.bot_title": "Telegram бот",
+  "crm.bot_desc": "Отслеживайте заказы и сообщения через Telegram бот"
 }
