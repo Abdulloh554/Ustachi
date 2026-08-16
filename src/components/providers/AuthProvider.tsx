@@ -4,10 +4,9 @@ import { useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { useRouter, usePathname } from 'next/navigation'
 
-const publicPaths = ['/', '/auth/login', '/auth/register', '/masters']
+const publicPaths = ['/', '/auth/login', '/auth/register']
 
-const isPublicPath = (path: string) =>
-  publicPaths.includes(path) || path.startsWith('/masters/')
+const isPublicPath = (path: string) => publicPaths.includes(path)
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const { loadProfile, user, isLoading } = useAuthStore()

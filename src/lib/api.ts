@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ustachibackend.onrender.com/api'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
 let inMemoryToken: string | null = null
 let refreshPromise: Promise<string | null> | null = null
@@ -80,10 +80,44 @@ export const orderAPI = {
   list: (params?: any) => api.get('/orders/', { params }),
   create: (data: any) => api.post('/orders/', data),
   detail: (id: string) => api.get(`/orders/${id}/`),
-  accept: (id: string) => api.post(`/orders/${id}/accept/`),
-  cancel: (id: string) => api.post(`/orders/${id}/cancel/`),
-  updateStatus: (id: string, status: string) => api.post(`/orders/${id}/update_status/`, { status }),
+  update: (id: string, data: any) => api.patch(`/orders/${id}/`, data),
+  assign: (id: string, staffId: string) => api.post(`/orders/${id}/assign/`, { staff_id: staffId }),
+  updateStatus: (id: string, status: string, paymentMethod?: string) =>
+    api.post(`/orders/${id}/update_status/`, { status, payment_method: paymentMethod }),
+  cancel: (id: string, reason?: string) => api.post(`/orders/${id}/cancel/`, { reason }),
+  consume: (id: string, productId: string, quantity: number) =>
+    api.post(`/orders/${id}/consume/`, { product_id: productId, quantity }),
   logs: (id: string) => api.get(`/orders/${id}/logs/`),
+}
+
+export const workshopAPI = {
+  public: () => api.get('/workshops/public/'),
+  me: () => api.get('/workshops/me/'),
+  updateMe: (data: any) => api.put('/workshops/me/', data),
+  dashboard: () => api.get('/workshops/me/dashboard/'),
+  reports: (params?: any) => api.get('/workshops/me/reports/', { params }),
+
+  staffList: () => api.get('/workshops/me/staff/'),
+  staffCreate: (data: any) => api.post('/workshops/me/staff/', data),
+  staffUpdate: (id: string, data: any) => api.patch(`/workshops/me/staff/${id}/`, data),
+  staffRemove: (id: string) => api.delete(`/workshops/me/staff/${id}/`),
+
+  serviceList: () => api.get('/workshops/me/services/'),
+  serviceCreate: (data: any) => api.post('/workshops/me/services/', data),
+  serviceUpdate: (id: string, data: any) => api.patch(`/workshops/me/services/${id}/`, data),
+  serviceRemove: (id: string) => api.delete(`/workshops/me/services/${id}/`),
+
+  inventoryList: () => api.get('/workshops/me/inventory/'),
+  inventoryCreate: (data: any) => api.post('/workshops/me/inventory/', data),
+  inventoryUpdate: (id: string, data: any) => api.patch(`/workshops/me/inventory/${id}/`, data),
+  inventoryRemove: (id: string) => api.delete(`/workshops/me/inventory/${id}/`),
+}
+
+export const staffAPI = {
+  me: () => api.get('/staff/me/'),
+  updateMe: (data: any) => api.patch('/staff/me/', data),
+  myOrders: (params?: any) => api.get('/staff/me/orders/', { params }),
+  myToday: () => api.get('/staff/me/today/'),
 }
 
 export const chatAPI = {
@@ -98,60 +132,11 @@ export async function chatWebSocketUrl(conversationId: string): Promise<string> 
   const base = API_URL
   const protocol = base.startsWith('https') ? 'wss' : 'ws'
   const host = base.replace(/^https?:\/\//, '').replace(/\/api\/?$/, '')
-  // WebSocket authenticates with the HttpOnly access-token cookie. Putting a
-  // bearer token in the URL would expose it to access logs and referrers.
-  return `${protocol}://${host}/ws/chat/${conversationId}/`
-}
-
-export const masterAPI = {
-  list: (params?: any) => api.get('/masters/', { params }),
-  detail: (id: string) => api.get(`/masters/${id}/`),
-  works: (id: string) => api.get(`/masters/${id}/orders/`),
-  myProfile: () => api.get('/masters/me/profile/'),
-  updateProfile: (data: any) => api.patch('/masters/me/profile/', data),
-  availableOrders: () => api.get('/masters/available-orders/'),
-}
-
-export const clientAPI = {
-  myOrders: () => api.get('/clients/my-orders/'),
-}
-
-export const reviewAPI = {
-  submit: (data: any) => api.post('/masters/reviews/', data),
-  myReviews: () => api.get('/masters/reviews/'),
-}
-
-export const adminAPI = {
-  dashboard: () => api.get('/admin/dashboard/'),
-  users: () => api.get('/admin/users/'),
-  masters: () => api.get('/admin/masters/'),
-  orders: (params?: any) => api.get('/admin/orders/', { params }),
-  map: () => api.get('/admin/map/'),
-}
-
-export const professionAPI = {
-  list: () => api.get('/auth/professions/'),
+  const token = getAccessToken()
+  return `${protocol}://${host}/ws/chat/${conversationId}/?token=${encodeURIComponent(token || '')}`
 }
 
 export const settingsAPI = {
   get: () => api.get('/settings/'),
   update: (data: any) => api.put('/settings/', data),
-}
-
-export const storeAPI = {
-  products: (params?: any) => api.get('/stores/products/', { params }),
-  product: (id: string) => api.get(`/stores/products/${id}/`),
-  favorites: () => api.get('/stores/favorites/'),
-  toggleFavorite: (productId: string) => api.post('/stores/favorites/toggle/', { product_id: productId }),
-  cart: () => api.get('/stores/cart/'),
-  addToCart: (productId: string, quantity = 1) => api.post('/stores/cart/', { product_id: productId, quantity }),
-  removeFromCart: (id: string) => api.delete(`/stores/cart/${id}/`),
-  checkout: () => api.post('/stores/cart/checkout/'),
-  myStore: () => api.get('/stores/me/store/'),
-  updateStore: (data: any) => api.put('/stores/me/store/', data),
-  myProducts: () => api.get('/stores/me/products/'),
-  createProduct: (data: any) => api.post('/stores/me/products/', data),
-  updateProduct: (id: string, data: any) => api.patch(`/stores/me/products/${id}/`, data),
-  deleteProduct: (id: string) => api.delete(`/stores/me/products/${id}/`),
-  statistics: () => api.get('/stores/me/statistics/'),
 }

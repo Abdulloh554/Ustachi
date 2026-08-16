@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import { Check } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
-import { professionAPI } from '@/lib/api'
 import { AuthPageSkeleton } from '@/components/ui/Skeleton'
 import AuthShell from '@/components/auth/AuthShell'
 import RegisterRoleStep from '@/components/auth/RegisterRoleStep'
@@ -13,9 +12,7 @@ import RegisterDetailsForm, { RegisterFormData } from '@/components/auth/Registe
 
 const roleRoutes: Record<string, string> = {
   client: '/client',
-  master: '/master',
-  seller: '/seller',
-  admin: '/admin',
+  owner: '/dashboard',
 }
 
 const brandPoints = [
@@ -30,49 +27,24 @@ const initialForm: RegisterFormData = {
   first_name: '',
   last_name: '',
   role: 'client',
-  profession_ids: [],
-  bio: '',
-  experience_years: 0,
 }
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<RegisterFormData>(initialForm)
-  const [professions, setProfessions] = useState<any[]>([])
-  const [professionsLoading, setProfessionsLoading] = useState(true)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const { register, isLoading } = useAuthStore()
   const { t } = useTranslation()
   const router = useRouter()
 
-  useEffect(() => {
-    professionAPI.list()
-      .then((res) => setProfessions(res.data.results || res.data))
-      .catch(() => setProfessions([]))
-      .finally(() => setProfessionsLoading(false))
-  }, [])
-
   const handleChange = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const toggleProfession = (id: string) => {
-    setForm((prev) => ({
-      ...prev,
-      profession_ids: prev.profession_ids.includes(id)
-        ? prev.profession_ids.filter((p) => p !== id)
-        : [...prev.profession_ids, id],
-    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    if (form.role === 'master' && form.profession_ids.length === 0) {
-      setError(t('auth.choose_profession_required'))
-      return
-    }
     setSubmitting(true)
     try {
       const user = await register({
@@ -82,9 +54,6 @@ export default function RegisterPage() {
         first_name: form.first_name,
         last_name: form.last_name,
         role: form.role,
-        profession_ids: form.role === 'master' ? form.profession_ids : undefined,
-        bio: form.role === 'master' ? form.bio : undefined,
-        experience_years: form.role === 'master' ? form.experience_years : undefined,
       })
       router.push(roleRoutes[user.role] || '/client')
     } catch (err: any) {
@@ -125,12 +94,9 @@ export default function RegisterPage() {
       {step === 2 && (
         <RegisterDetailsForm
           data={form}
-          professions={professions}
-          professionsLoading={professionsLoading}
           submitting={submitting}
           error={error}
           onChange={handleChange}
-          onToggleProfession={toggleProfession}
           onSubmit={handleSubmit}
           onBack={() => setStep(1)}
         />

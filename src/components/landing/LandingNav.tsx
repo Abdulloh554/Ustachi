@@ -28,8 +28,8 @@ export default function LandingNav() {
             <Link
               href={
                 user.role === 'client' ? '/client' :
-                user.role === 'master' ? '/master' :
-                user.role === 'seller' ? '/seller' : '/admin'
+                user.role === 'owner' ? '/dashboard' :
+                user.role === 'staff' ? '/staff' : '/admin/settings'
               }
               className="btn btn-primary px-4 py-2 text-sm"
             >

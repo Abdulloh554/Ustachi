@@ -1,10 +1,10 @@
-export type PanelKey = 'admin' | 'client' | 'master' | 'seller'
+export type PanelKey = 'dashboard' | 'staff' | 'client' | 'admin'
 
 const PANEL_PREFIXES: { key: PanelKey; prefix: string }[] = [
-  { key: 'admin', prefix: '/admin' },
+  { key: 'dashboard', prefix: '/dashboard' },
+  { key: 'staff', prefix: '/staff' },
   { key: 'client', prefix: '/client' },
-  { key: 'master', prefix: '/master' },
-  { key: 'seller', prefix: '/seller' },
+  { key: 'admin', prefix: '/admin' },
 ]
 
 export function getActivePanel(pathname: string): PanelKey | null {

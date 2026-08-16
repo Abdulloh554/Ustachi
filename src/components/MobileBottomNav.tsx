@@ -6,36 +6,31 @@ import { useAuthStore } from '@/store/authStore'
 import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
-  LayoutDashboard, Users, ClipboardList, Map, User, Settings,
-  Store, Boxes, BarChart3, ShoppingCart,
+  LayoutDashboard, ClipboardList, Settings, CalendarCheck,
+  MessageSquare, Users, Wrench, Boxes, BarChart3,
 } from 'lucide-react'
+
+const ownerLinks = [
+  { href: '/dashboard', labelKey: 'sidebar.today', icon: LayoutDashboard },
+  { href: '/dashboard/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
+  { href: '/dashboard/staff', labelKey: 'sidebar.staff', icon: Users },
+  { href: '/dashboard/inventory', labelKey: 'sidebar.inventory', icon: Boxes },
+  { href: '/dashboard/reports', labelKey: 'sidebar.reports', icon: BarChart3 },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+]
+
+const staffLinks = [
+  { href: '/staff', labelKey: 'sidebar.today', icon: CalendarCheck },
+  { href: '/staff/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+]
 
 const clientLinks = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
-  { href: '/client/masters', labelKey: 'sidebar.masters', icon: Users },
-  { href: '/client/store', labelKey: 'sidebar.store', icon: Store },
-  { href: '/client/cart', labelKey: 'sidebar.cart', icon: ShoppingCart },
-  { href: '/client/profile', labelKey: 'sidebar.profile', icon: User },
-  { href: '/client/settings', labelKey: 'sidebar.settings', icon: Settings },
-]
-
-const masterLinks = [
-  { href: '/master', labelKey: 'sidebar.listings', icon: LayoutDashboard },
-  { href: '/master/map', labelKey: 'sidebar.map', icon: Map },
-  { href: '/master/profile', labelKey: 'sidebar.profile', icon: User },
-  { href: '/master/settings', labelKey: 'sidebar.settings', icon: Settings },
-]
-
-const sellerLinks = [
-  { href: '/seller/warehouse', labelKey: 'sidebar.warehouse', icon: Boxes },
-  { href: '/seller/statistics', labelKey: 'sidebar.statistics', icon: BarChart3 },
-  { href: '/seller/settings', labelKey: 'sidebar.settings', icon: Settings },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
 ]
 
 const adminLinks = [
-  { href: '/admin', labelKey: 'sidebar.dashboard', icon: LayoutDashboard },
-  { href: '/admin/masters', labelKey: 'sidebar.masters', icon: Users },
-  { href: '/admin/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
   { href: '/admin/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
@@ -48,8 +43,8 @@ export default function MobileBottomNav() {
   const activePanel = getActivePanel(pathname)
   const panel = activePanel || role
   let links = clientLinks
-  if (panel === 'master') links = masterLinks
-  if (panel === 'seller') links = sellerLinks
+  if (panel === 'dashboard') links = ownerLinks
+  if (panel === 'staff') links = staffLinks
   if (panel === 'admin') links = adminLinks
 
   return (

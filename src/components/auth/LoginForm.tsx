@@ -9,8 +9,8 @@ import { useAuthStore } from '@/store/authStore'
 
 const roleRoutes: Record<string, string> = {
   client: '/client',
-  master: '/master',
-  seller: '/seller',
+  owner: '/dashboard',
+  staff: '/staff',
   admin: '/admin',
 }
 

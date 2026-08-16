@@ -1,21 +1,16 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { User, Wrench, Store } from 'lucide-react'
+import { User, Store } from 'lucide-react'
 
 interface RegisterRoleStepProps {
-  onSelect: (role: 'client' | 'master' | 'seller') => void
+  onSelect: (role: 'client' | 'owner') => void
 }
 
 export default function RegisterRoleStep({ onSelect }: RegisterRoleStepProps) {
   const { t } = useTranslation()
 
-  const roleCard = (
-    role: 'client' | 'master' | 'seller',
-    Icon: typeof User,
-    titleKey: string,
-    descKey: string
-  ) => (
+  const roleCard = (role: 'client' | 'owner', Icon: typeof User, titleKey: string, descKey: string) => (
     <button
       type="button"
       onClick={() => onSelect(role)}
@@ -34,10 +29,9 @@ export default function RegisterRoleStep({ onSelect }: RegisterRoleStepProps) {
   return (
     <div className="card rounded-xl p-8">
       <label className="block text-sm font-semibold mb-3">{t('role.choose')}</label>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         {roleCard('client', User, 'role.client', 'role.client_desc')}
-        {roleCard('master', Wrench, 'role.master', 'role.master_desc')}
-        {roleCard('seller', Store, 'role.seller', 'role.seller_desc')}
+        {roleCard('owner', Store, 'role.owner', 'role.owner_desc')}
       </div>
     </div>
   )

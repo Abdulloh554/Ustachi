@@ -2,40 +2,30 @@
 
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import { ArrowLeft, Phone, Loader2 } from 'lucide-react'
-import { MasterFields } from '@/components/auth/RegisterMasterFields'
+import { ArrowLeft, Phone, Loader2, Info } from 'lucide-react'
 
 export interface RegisterFormData {
   phone: string
   password: string
   first_name: string
   last_name: string
-  role: 'client' | 'master' | 'seller'
-  profession_ids: string[]
-  bio: string
-  experience_years: number
+  role: 'client' | 'owner'
 }
 
 interface RegisterDetailsFormProps {
   data: RegisterFormData
-  professions: any[]
-  professionsLoading: boolean
   submitting: boolean
   error: string
   onChange: (field: string, value: any) => void
-  onToggleProfession: (id: string) => void
   onSubmit: (e: React.FormEvent) => void
   onBack: () => void
 }
 
 export default function RegisterDetailsForm({
   data,
-  professions,
-  professionsLoading,
   submitting,
   error,
   onChange,
-  onToggleProfession,
   onSubmit,
   onBack,
 }: RegisterDetailsFormProps) {
@@ -100,16 +90,11 @@ export default function RegisterDetailsForm({
           />
         </div>
 
-        {data.role === 'master' && (
-          <MasterFields
-            professions={professions}
-            loading={professionsLoading}
-            selectedIds={data.profession_ids}
-            bio={data.bio}
-            experienceYears={data.experience_years}
-            onChange={onChange}
-            onToggleProfession={onToggleProfession}
-          />
+        {data.role === 'owner' && (
+          <p className="rounded-xl p-3 flex items-start gap-2 text-sm" style={{ background: 'var(--bg-secondary)' }}>
+            <Info size={16} className="shrink-0 mt-0.5" style={{ color: 'var(--primary-active)' }} />
+            {t('auth.owner_hint')}
+          </p>
         )}
 
         {error && <p className="error">{error}</p>}

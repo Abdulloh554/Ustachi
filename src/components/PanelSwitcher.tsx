@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { useTranslation } from 'react-i18next'
-import { Shield, User, Wrench, Store, LucideIcon } from 'lucide-react'
+import { Shield, User, CalendarCheck, LayoutDashboard, LucideIcon } from 'lucide-react'
 
 interface Panel {
   href: string
@@ -13,10 +13,10 @@ interface Panel {
 }
 
 const panels: Panel[] = [
-  { href: '/admin', labelKey: 'panel.admin', icon: Shield },
+  { href: '/dashboard', labelKey: 'panel.dashboard', icon: LayoutDashboard },
+  { href: '/staff', labelKey: 'panel.staff', icon: CalendarCheck },
   { href: '/client', labelKey: 'panel.client', icon: User },
-  { href: '/master', labelKey: 'panel.master', icon: Wrench },
-  { href: '/seller', labelKey: 'panel.seller', icon: Store },
+  { href: '/admin/settings', labelKey: 'panel.admin', icon: Shield },
 ]
 
 export default function PanelSwitcher() {

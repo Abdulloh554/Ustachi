@@ -31,8 +31,8 @@ export default function HeroSection() {
           <Link href="/auth/register" className="btn btn-primary px-7 py-3 text-base">
             {t('landing.cta_btn')} <ArrowRight size={17} />
           </Link>
-          <Link href="/client/masters" className="btn btn-ghost px-7 py-3 text-base">
-            {t('nav.view_masters')}
+          <Link href="/auth/login" className="btn btn-ghost px-7 py-3 text-base">
+            {t('nav.login')}
           </Link>
         </div>
       </div>

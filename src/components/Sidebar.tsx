@@ -4,53 +4,48 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
-import { reviewAPI } from '@/lib/api'
 import { getActivePanel } from '@/lib/panel'
 import { useTranslation } from 'react-i18next'
 import {
-  LayoutDashboard, Users, ClipboardList, Map, User,
-  Settings, LogOut, Sun, Moon, Wrench, Star, Menu, X,
-  Store, Boxes, BarChart3, ShoppingCart,
+  LayoutDashboard, ClipboardList, Users, Wrench, Boxes, BarChart3,
+  Settings, LogOut, Sun, Moon, Menu, X, CalendarCheck, MessageSquare,
 } from 'lucide-react'
 import SidebarHeader from '@/components/sidebar/SidebarHeader'
 import SidebarNav, { SidebarLink } from '@/components/sidebar/SidebarNav'
 import SidebarFooter from '@/components/sidebar/SidebarFooter'
 
+const ownerLinks: SidebarLink[] = [
+  { href: '/dashboard', labelKey: 'sidebar.today', icon: LayoutDashboard },
+  { href: '/dashboard/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
+  { href: '/dashboard/staff', labelKey: 'sidebar.staff', icon: Users },
+  { href: '/dashboard/services', labelKey: 'sidebar.services', icon: Wrench },
+  { href: '/dashboard/inventory', labelKey: 'sidebar.inventory', icon: Boxes },
+  { href: '/dashboard/reports', labelKey: 'sidebar.reports', icon: BarChart3 },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/dashboard/settings', labelKey: 'sidebar.settings', icon: Settings },
+]
+
+const staffLinks: SidebarLink[] = [
+  { href: '/staff', labelKey: 'sidebar.today', icon: CalendarCheck },
+  { href: '/staff/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
+  { href: '/staff/settings', labelKey: 'sidebar.settings', icon: Settings },
+]
+
 const clientLinks: SidebarLink[] = [
   { href: '/client', labelKey: 'sidebar.orders', icon: ClipboardList },
-  { href: '/client/masters', labelKey: 'sidebar.masters', icon: Users },
-  { href: '/client/store', labelKey: 'sidebar.store', icon: Store },
-  { href: '/client/cart', labelKey: 'sidebar.cart', icon: ShoppingCart },
-  { href: '/client/profile', labelKey: 'sidebar.profile', icon: User },
+  { href: '/chat', labelKey: 'sidebar.chat', icon: MessageSquare },
   { href: '/client/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
-const masterLinks: SidebarLink[] = [
-  { href: '/master', labelKey: 'sidebar.listings', icon: LayoutDashboard },
-  { href: '/master/map', labelKey: 'sidebar.map', icon: Map },
-  { href: '/master/reviews', labelKey: 'sidebar.reviews', icon: Star },
-  { href: '/master/profile', labelKey: 'sidebar.profile', icon: User },
-  { href: '/master/settings', labelKey: 'sidebar.settings', icon: Settings },
-]
-
-const sellerLinks: SidebarLink[] = [
-  { href: '/seller/warehouse', labelKey: 'sidebar.warehouse', icon: Boxes },
-  { href: '/seller/statistics', labelKey: 'sidebar.statistics', icon: BarChart3 },
-  { href: '/seller/settings', labelKey: 'sidebar.settings', icon: Settings },
-]
-
 const adminLinks: SidebarLink[] = [
-  { href: '/admin', labelKey: 'sidebar.dashboard', icon: LayoutDashboard },
-  { href: '/admin/masters', labelKey: 'sidebar.masters', icon: Users },
-  { href: '/admin/orders', labelKey: 'sidebar.orders_alt', icon: ClipboardList },
-  { href: '/admin/map', labelKey: 'sidebar.map', icon: Map },
   { href: '/admin/settings', labelKey: 'sidebar.settings', icon: Settings },
 ]
 
 const linksByRole: Record<string, SidebarLink[]> = {
+  owner: ownerLinks,
+  staff: staffLinks,
   client: clientLinks,
-  master: masterLinks,
-  seller: sellerLinks,
   admin: adminLinks,
 }
 
@@ -60,32 +55,16 @@ export default function Sidebar() {
   const { theme, toggle } = useThemeStore()
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [reviewCount, setReviewCount] = useState(0)
 
   const role = user?.role || 'client'
   const activePanel = getActivePanel(pathname)
   const panel = activePanel || role
   const links = linksByRole[panel] || linksByRole[role] || clientLinks
+  const headerRole = panel === 'dashboard' ? 'owner' : panel
 
   useEffect(() => {
     setOpen(false)
   }, [pathname])
-
-  useEffect(() => {
-    if (panel === 'master') {
-      reviewAPI.myReviews()
-        .then((res) => {
-          const list = res.data.results || res.data
-          setReviewCount(Array.isArray(list) ? list.length : 0)
-        })
-        .catch(() => {})
-    }
-  }, [panel])
-
-  const badges: Record<string, number> = {}
-  if (panel === 'master') {
-    badges['/master/reviews'] = reviewCount
-  }
 
   return (
     <>
@@ -109,9 +88,9 @@ export default function Sidebar() {
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        <SidebarHeader open={open} role={panel} />
+        <SidebarHeader open={open} role={headerRole} />
 
-        <SidebarNav links={links} open={open} badges={badges} />
+        <SidebarNav links={links} open={open} badges={{}} />
 
         <SidebarFooter
           open={open}
